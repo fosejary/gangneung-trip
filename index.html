@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f5f73">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="강릉여행">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.5 system-ui,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>강릉·대관령 가족여행</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: phone app shell — sticky header, day switcher, timeline + slot cards, fixed bottom tab bar */
+:root {
+  --bg: #eaf0ef;
+  --surface: #ffffff;
+  --surface-2: #f3f7f6;
+  --ink: #16262b;
+  --muted: #5b6a6d;
+  --line: #d6e0df;
+  --sea: #1f5f73;
+  --pine: #4b6640;
+  --clay: #8f5523;
+  --hot: #9a3a30;
+  --wx: #3d6478;
+  --now: #c2410c;
+  --f-display: "Gowun Batang", "Nanum Myeongjo", serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1618; --surface: #162125; --surface-2: #1c292d; --ink: #e2ebeb; --muted: #97a8aa;
+    --line: #29393d; --sea: #72b6ca; --pine: #9dc28a; --clay: #dba36f; --hot: #e48d80; --wx: #92b7cb; --now: #fb923c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1618; --surface: #162125; --surface-2: #1c292d; --ink: #e2ebeb; --muted: #97a8aa;
+  --line: #29393d; --sea: #72b6ca; --pine: #9dc28a; --clay: #dba36f; --hot: #e48d80; --wx: #92b7cb; --now: #fb923c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; -webkit-tap-highlight-color: transparent; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sea); }
+button { font: inherit; color: inherit; }
+a { color: var(--sea); }
+:focus-visible { outline: 2px solid var(--sea); outline-offset: 2px; border-radius: 6px; }
+
+.app { max-width: 560px; margin: 0 auto; min-height: 100%; }
+.gut { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--sea); color: #fff; }
+.top-in { padding-block: 12px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.top h1 { margin: 0; font-family: var(--f-display); font-size: 19px; line-height: 1.25; letter-spacing: -0.01em; }
+.top .sub { font-size: 12px; opacity: .82; letter-spacing: .02em; }
+.dchip { flex: none; font-family: var(--f-mono); font-size: 13px; font-weight: 600; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); padding: 4px 10px; border-radius: 999px; }
+.dayseg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding-block: 0 12px; }
+.dayseg button { border: 0; background: rgba(255,255,255,.12); color: #fff; border-radius: 12px; padding: 7px 4px; cursor: pointer; line-height: 1.25; }
+.dayseg button b { display: block; font-family: var(--f-mono); font-size: 13px; letter-spacing: .04em; }
+.dayseg button span { font-size: 12px; opacity: .85; }
+.dayseg button[aria-selected="true"] { background: #fff; color: #1f5f73; }
+.dayseg button[aria-selected="true"] span { opacity: 1; }
+
+main { padding-block: 16px calc(84px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
+.view[hidden] { display: none !important; }
+.view { display: grid; gap: 14px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; min-width: 0; }
+.eyebrow { font-size: 11.5px; letter-spacing: .08em; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+h2 { font-family: var(--f-display); font-size: 21px; margin: 2px 0 6px; line-height: 1.3; text-wrap: balance; }
+h3 { font-size: 16.5px; margin: 0; line-height: 1.4; text-wrap: balance; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+/* day head */
+.wxline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pill { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); }
+.pill.wx { color: var(--wx); border-color: color-mix(in srgb, var(--wx) 30%, var(--line)); background: color-mix(in srgb, var(--wx) 8%, var(--surface)); }
+.route { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 8px; font-weight: 500; }
+.route .arr { color: var(--muted); font-size: 12px; }
+.route .stop { background: var(--surface-2); border-radius: 8px; padding: 2px 8px; font-size: 13.5px; }
+
+/* overview timeline */
+.tl { list-style: none; margin: 8px 0 0; padding: 0; display: grid; }
+.tl li { display: grid; grid-template-columns: 88px 1fr; gap: 10px; padding: 9px 0; border-top: 1px dashed var(--line); cursor: pointer; }
+.tl li:first-child { border-top: 0; }
+.tl li.nolink { cursor: default; }
+.tl .t { font-family: var(--f-mono); font-size: 12.5px; color: var(--sea); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.tl .ti { font-weight: 600; font-size: 14.5px; line-height: 1.45; }
+.tl .w { font-size: 12.5px; color: var(--wx); }
+.alt { display: inline-block; margin-top: 4px; font-size: 12px; line-height: 1.45; color: var(--pine); background: color-mix(in srgb, var(--pine) 11%, var(--surface)); border: 1px solid color-mix(in srgb, var(--pine) 30%, var(--line)); border-radius: 8px; padding: 2px 8px; }
+.tl li.is-now .t, .tl li.is-now .ti { color: var(--now); }
+
+/* slot */
+.slot { scroll-margin-top: 140px; padding: 0; overflow: hidden; }
+.slot.is-now { border-color: var(--now); box-shadow: 0 0 0 1px var(--now); }
+.slot-h { padding: 14px 16px 10px; display: grid; gap: 4px; }
+.slot-time { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 13px; color: var(--sea); font-weight: 600; font-variant-numeric: tabular-nums; }
+.nowtag { font-family: var(--f-body); font-size: 11px; font-weight: 700; color: #fff; background: var(--now); padding: 1px 7px; border-radius: 999px; letter-spacing: .04em; }
+.move { margin: 0 16px; padding: 7px 10px; border-radius: 10px; background: var(--surface-2); font-size: 12.5px; color: var(--muted); display: flex; gap: 6px; }
+.move b { color: var(--ink); font-weight: 600; }
+.ptabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 16px 0; }
+.ptab { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 4px; cursor: pointer; font-size: 13px; line-height: 1.2; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.ptab .k { font-family: var(--f-mono); font-weight: 600; }
+.ptab[aria-selected="true"] { background: var(--pc); border-color: var(--pc); color: var(--surface); }
+.pbody { margin: 8px 16px 0; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--pc) 9%, var(--surface)); border: 1px solid color-mix(in srgb, var(--pc) 25%, var(--line)); }
+.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.items li { position: relative; padding-left: 12px; font-size: 14.5px; line-height: 1.6; overflow-wrap: anywhere; }
+.items li::before { content: ""; position: absolute; left: 0; top: .72em; width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .45; }
+.items b { font-weight: 600; }
+.pbody .items b { color: var(--pc); }
+.hot { margin: 8px 16px 0; padding: 10px 12px; border-radius: 12px; border: 1px dashed color-mix(in srgb, var(--hot) 45%, var(--line)); }
+.hot .lbl { font-size: 12.5px; font-weight: 700; color: var(--hot); margin-bottom: 4px; }
+.hot .items b { color: var(--hot); }
+.wxbox { margin: 8px 16px 0; font-size: 13px; color: var(--wx); display: flex; gap: 6px; }
+details.more { margin: 10px 0 0; border-top: 1px solid var(--line); }
+details.more summary { list-style: none; cursor: pointer; padding: 11px 16px; font-size: 13.5px; font-weight: 600; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary::after { content: "펼치기"; font-size: 12px; font-weight: 500; }
+details.more[open] summary::after { content: "접기"; }
+.info { padding: 0 16px 14px; display: grid; gap: 12px; }
+.info section { display: grid; gap: 4px; min-width: 0; }
+.info h4 { margin: 0; font-size: 12px; letter-spacing: .06em; color: var(--ic); font-weight: 700; }
+.info .items li { font-size: 13.5px; }
+.maplink, .copy { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 0 7px; margin-left: 4px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface-2); color: var(--sea); text-decoration: none; line-height: 1.7; vertical-align: 1px; cursor: pointer; }
+.tel { font-family: var(--f-mono); font-size: .94em; color: var(--sea); text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
+
+/* quick */
+.qrow { display: grid; grid-template-columns: 62px 1fr; gap: 10px; padding: 8px 0; border-top: 1px dashed var(--line); font-size: 14px; }
+.qrow:first-of-type { border-top: 0; }
+.qk { font-size: 12px; font-weight: 700; color: var(--qc); padding-top: 2px; }
+.rule { margin-top: 8px; font-size: 13px; padding: 8px 10px; border-radius: 10px; background: var(--surface-2); }
+.rule b { color: var(--clay); }
+
+/* prep */
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.seg button { border: 0; background: transparent; padding: 8px; border-radius: 9px; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--muted); }
+.seg button[aria-selected="true"] { background: var(--sea); color: var(--surface); }
+.prog { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.bar { flex: 1; height: 8px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--pine); transition: width .25s; }
+.chk { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 12px 0; border-top: 1px solid var(--line); align-items: start; }
+.chk:first-child { border-top: 0; }
+.chk input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--pine); }
+.chk .ttl { font-weight: 600; font-size: 15px; }
+.chk.done .ttl { text-decoration: line-through; color: var(--muted); }
+.chk .meta { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 6px; }
+.chk .note { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.star { color: var(--hot); }
+.pk { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px 10px; padding: 9px 0; border-top: 1px solid var(--line); align-items: start; font-size: 14.5px; }
+.pk:first-of-type { border-top: 0; }
+.pk input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--pine); }
+.pk.done .n { text-decoration: line-through; color: var(--muted); }
+.pk .m { font-size: 12.5px; color: var(--muted); }
+.pk .w { font-size: 11.5px; color: var(--sea); text-align: right; max-width: 110px; line-height: 1.4; padding-top: 3px; }
+.ghost { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 12px; font-size: 13px; cursor: pointer; color: var(--muted); justify-self: end; }
+
+/* info */
+.kv { display: grid; gap: 2px; padding: 8px 0; border-top: 1px dashed var(--line); }
+.kv:first-of-type { border-top: 0; }
+.kv .k { font-size: 12px; color: var(--muted); font-weight: 600; }
+.wxday { display: grid; gap: 4px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.wxday:first-of-type { border-top: 0; }
+.wxday .d { font-weight: 700; font-family: var(--f-mono); color: var(--wx); }
+.legend { display: grid; gap: 6px; font-size: 14px; }
+.legend span b { font-family: var(--f-mono); margin-right: 6px; }
+.alert { border-color: color-mix(in srgb, var(--hot) 40%, var(--line)); background: color-mix(in srgb, var(--hot) 6%, var(--surface)); }
+.alert h3 { color: var(--hot); }
+ol.src { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--muted); }
+
+/* tab bar */
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
+.tabbar-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tabbar button { border: 0; background: none; padding: 8px 0 9px; cursor: pointer; display: grid; justify-items: center; gap: 2px; font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.tabbar svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tabbar button[aria-selected="true"] { color: var(--sea); }
+
+.toast { position: fixed; left: 50%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); font-size: 13px; padding: 7px 14px; border-radius: 999px; z-index: 9; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.toast.on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="top">
+    <div class="gut">
+      <div class="top-in">
+        <div style="min-width:0">
+          <h1>강릉·대관령 가족여행</h1>
+          <div class="sub">10.22 목 – 10.24 토 · 2박 3일 · v3</div>
+        </div>
+        <div class="dchip" id="dchip">D-1</div>
+      </div>
+      <div class="dayseg" id="dayseg" role="tablist" aria-label="일차 선택"></div>
+    </div>
+  </header>
+
+  <main class="gut" id="main">
+    <section class="view" id="v-plan"></section>
+    <section class="view" id="v-quick" hidden></section>
+    <section class="view" id="v-prep" hidden></section>
+    <section class="view" id="v-info" hidden></section>
+  </main>
+</div>
+
+<nav class="tabbar" aria-label="메뉴">
+  <div class="tabbar-in" role="tablist">
+    <button data-tab="plan" aria-selected="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>일정</button>
+    <button data-tab="quick" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M7 4v16M17 4v16M4 8h6M14 15h6"/></svg>플랜 전환</button>
+    <button data-tab="prep" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/><path d="M4 20h16" opacity=".5"/></svg>준비</button>
+    <button data-tab="info" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg>정보</button>
+  </div>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const PL = [
+  { k: 'A', tag: '추천', c: 'var(--sea)' },
+  { k: 'B', tag: '여유', c: 'var(--pine)' },
+  { k: 'C', tag: '대안', c: 'var(--clay)' }
+];
+const IK = [['날씨', 'var(--wx)'], ['위치·연락처', 'var(--muted)'], ['시간·요금', 'var(--muted)'], ['주차·동선', 'var(--muted)'], ['아이', 'var(--sea)'], ['어머님', 'var(--clay)']];
+const S = (time, title, plans, star, info, aTag) => ({ time, title, plans, star, info, aTag });
+
+const WEATHER = [
+  ['10/22 (목)', '아침 4~7℃ / 낮 14~16℃', '아침 -3~-1℃ / 낮 11~13℃', '맑음. 동해안 강풍특보 가능, 너울', '바비큐 실내 전환, 해안도로 드라이브 제외, 출발 전 성에 제거'],
+  ['10/23 (금)', '전국 아침 3~15℃ / 낮 18~22℃', '아침까지 평년보다 2~6℃ 낮음', '가끔 구름, 동해 파고 0.5~1.5m', '3일 중 최적 → 해변·카페 유지, 숙소 앞 압축 동선 추가'],
+  ['10/24 (토)', '전국 아침 8~17℃ / 낮 18~21℃', '강릉보다 4~6℃ 낮음, 낮 10℃대 중반', '중부 구름많음, 비 없음', '트랙터마차 담요·핫팩, 출발 20분 앞당김 고려']
+];
+
+const DAYS = [
+{ label: 'DAY 1', ymd: '2026-10-22', short: '10/22 목', date: '10월 22일 목요일',
+intro: '맑지만 3일 중 가장 춥고 바람이 강한 날이라, 바깥에 오래 서 있는 구간을 실내로 옮겼습니다. 하린이 기상(08:00)에 맞춰 출발을 09:30으로 늦추고 오후 일정을 뒤로 밀었습니다.',
+overview: [
+['08:00–09:30', '하린이 기상 · 아침 식사 · 짐 싣기', '출발 전 성에 확인'],
+['09:30–12:50', '양주 출발 → 강릉 이동 (힐링 전망 휴게소 경유)', '오전 내륙 한 자릿수 기온'],
+['13:00–14:15', '초당순두부마을 미식 점심 & 솔숲 정원 산책', '솔숲이 바람막이'],
+['14:30–15:30', '강릉중앙시장 & 월화거리 + 꼬막비빔밥 포장', '야외 산책 짧게'],
+['16:00–17:50', '치즈바다 풀빌라 체크인 & 실내 온수풀·족욕', '테라스 최소화', 'B: 30분 휴식 후 16:30~17:20 물놀이'],
+['18:00~19:00 사이', '실내 그릴 만찬 & 중앙시장·엄지네 포장 미식', '저녁 10℃ 안팎 + 바람']],
+slots: [
+S('09:30 ~ 12:50', '양주 출발 → 강릉 이동 (힐링 전망 휴게소 경유)', [
+'08:00 하린이 기상 → 아침 식사·짐 싣기 → 09:20 시동·성에 확인 → 09:30 양주 출발, 서울양양고속도로 경유 · [내린천휴게소(양양방향)] 약 30분 정차 – 4층 실내 전망 카페에서 따뜻한 대추차 티타임 20분 + 잔디광장 걸음마 10분 (방풍 점퍼 착용)',
+'09:30 출발 → 광주원주/영동고속도로 경유 · [횡성휴게소(강릉방향)] 약 30분 – 한우떡더덕스테이크 간식 + 어머님 다리 펴기 & 하린이 유아휴게실. 메타세쿼이아 산책은 5분 이내로',
+'교통 정체 시 [가평휴게소] + [평창휴게소] 15분씩 2회 분할 정차로 카시트 피로 최소화 · 헌화로·창해로 해안도로 드라이브 → 21~22일 동해안 너울 예보로 이번 일정에서 제외'], null, [
+'경기 북동부·강원 내륙 아침 영하권, 서리·얼음 예보 · 인제 구간 오전 한 자릿수 기온 + 바람 · 터널 출구·교량 구간은 감속',
+'[내린천휴게소] 강원 인제군 상남면 서울양양고속도로 117 · [횡성휴게소] 강원 횡성군 안흥면 영동고속도로 153 · 목적지: 강릉 초당순두부마을 일원',
+'예상 소요 약 3시간 20분 (휴게소 30분 포함) · 휴게소 유아휴게실(수유실) 24시간 개방 – 전자레인지·기저귀교환대·아기침대',
+"평일(목) 오전 출발로 정체 적음 · 휴게소에서는 본관 출입구 가까운 '임산부·유아 동반 우선 주차구역' 활용",
+'출발 후 카시트에서 오전 낮잠 가능하도록 블랭킷 준비 · 점심이 13시로 늦어지므로 휴게소에서 유아 간식 · 스티커북·사운드북·핑거푸드(떡뻥·치즈) 앞좌석 비치 · 휴게소에서는 차 안에서 방풍 점퍼·모자를 먼저 입힌 뒤 하차, 유아휴게실에서 기저귀 교체',
+'뒷좌석 목베개·벨벳 무릎담요·발받침 쿠션 · 휴게소는 바람 없는 실내 창가석에서 대추차/아메리카노 대접하며 풍경 감상']),
+S('13:00 ~ 14:15', '초당순두부마을 미식 점심 & 솔숲 정원 산책', [
+'[1순위: 농촌순두부] 어른 – 얼큰/하얀 순두부전골 + 모두부 · 하린이 – 흰순두부 + 유아식 · 식사 후 도보 3분 [허균·허난설헌 기념공원] 솔숲 평지 산책 15분 (소나무숲이 바람을 막아 목요일에도 산책 가능)',
+'[2순위: 토담순두부] 전통 한옥 마당과 소나무 정원, 어머님 만족도 최고 · 자극 없는 순두부전골 & 두부제육',
+"[3순위: 동화가든 본점] 11시경 '테이블링 앱' 원격 줄서기 후 대기 0분 입장 · 식사 후 [순두부젤라또 1호점] 디저트"],
+['★ 핫플', '[김우정초당짬뽕순두부] 초당순두부에 삼선짬뽕 불맛을 더한 특허 메뉴, 연중무휴 · [서지초가뜰] 창녕 조씨 가문이 대대로 이어온 강릉식 한정식, 소나무숲 – 어머님 1순위 감성 · [초당장칼국수] 어린이 짜장칼국수 메뉴, 아기 식기 완비 · [포남사골옹심이] 진한 사골육수에 직접 빚은 감자옹심이, 현지인 추천 맛집 – 맵지 않아 하린이·어머님 모두 OK, 테이블링 원격 줄서기 가능'], [
+'낮 14~16℃, 맑음, 바람 강함 · 실외 대기는 피하고, 솔숲 사진은 바람을 등지는 쪽에서',
+'[농촌순두부] 초당순두부길 108 (033-651-4009) · [토담순두부] 난설헌로193번길 1-19 (033-652-0336) · [동화가든] 초당순두부길77번길 15 (0507-1432-9885) · [김우정] 초당순두부길 102 (0507-1466-1453) · [서지초가뜰] 난곡길76번길 43-8 · [포남사골옹심이] 남구길10번길 11 (033-647-2638)',
+'[농촌] 07:00~19:00 (월 휴무) · [토담] 08:00~20:00 (수 휴무) · [동화가든] 07:00~19:30 (BT 16~17시, 수 휴무) · [김우정] 08:00~20:00 (BT 15:30~17:00, 연중무휴) · [서지초가뜰] 한정식 인당 2만 원대부터, 예약 가능 · [포남사골옹심이] 11:30~19:30 (BT 평일 14:30~15:30, 수 휴무) · ※ 목요일은 전 후보 정상 영업',
+'식당 주차장 만차 시 [허균·허난설헌기념관 무료 주차장] 또는 [초당임시공영주차장(초당동 59-1)] · 김우정·서지초가뜰은 전용 주차 · 포남사골옹심이는 전용 주차장 없음 → 매장 앞 골목 주차',
+"차에서 잠들었다면 깨우지 말고 한 명이 차에서 지키며 교대로 식사하거나 포장 · 간 안 된 '하얀 초두부' 단품 추가 → 앞접시에 덜어 식힌 뒤 유아식 밥에 비벼 급여 · 유아의자(범보/하이체어) 구비 · 초당장칼국수는 짜장칼국수 면을 가위로 잘라 소량 · 포남사골옹심이는 유아의자 3개, 순옹심이를 잘게 잘라 식힌 사골국물과 함께",
+'서서 대기하지 않도록 도착 5분 전 남편이 먼저 내려 좌석 세팅 · 식사 후 한옥 정원·솔숲에서 가족 스냅사진 (바람 강하면 5분 컷)']),
+S('14:30 ~ 15:30', '강릉중앙시장 & 월화거리 (차량 대기 없는 카페·소품샵 코스)', [
+'어머님 & 아내 & 하린이 – 중앙시장 초입 기차역 테마 소품샵 [월화역] 구경 후 1층 카페(또는 월화정 카페)에서 수제 식혜·커피 티타임 · 남편 – 전화 선주문한 닭강정·회 픽업 (약 25분) · [엄지네포장마차] 꼬막비빔밥은 15:30 숙소 가는 길에 가족과 함께 들러 픽업 (경유 약 5~10분)',
+'어머님 & 아내 & 하린이 – 초당동 한옥/정원 베이커리 카페에서 아기 간식과 티타임 · 남편 – 중앙시장 & 하나로마트 장보기 후 카페로 픽업 합류',
+'시장 진입 생략 → 주차 넓은 [강릉 농협하나로마트(교동/송정)]에서 1등급 한우·채소·주류 장보기 · 회와 닭강정은 숙소 인근 [사천진항 횟집] 포장 또는 배달 앱'],
+['★ 핫플', '[엄지네포장마차 본점] 강릉 여행 필수 코스로 꼽히는 꼬막비빔밥, 식신 4.2 – 저녁 만찬용 포장 · [강릉빵명장] 현지인 인기 대형 베이커리 카페 – B 동선의 넓은 카페 대안'], [
+'오후 동해안 바람 강함 · 월화거리 야외 산책은 10분 이내, 실내 소품샵·카페 중심',
+'[강릉중앙시장] 금성로 21 · [월화역 소품샵] 금성로11번길 21 · [남대천 제1공영주차장] 성남동 3-6 · [월화거리 공영주차장] 금성로13번길 17 · [엄지네포장마차] 경강로2255번길 21 · [강릉빵명장] 성덕로 107',
+'[월화역] 11:00~20:00, 입장 무료, 1층 평지라 유모차 진입 가능 · [남대천 제1공영주차장] 375면, 최초 1시간 무료 · [엄지네포장마차] 11:30~23:30 (월 휴무 → 목요일 영업), 꼬막비빔밥 2~3인분 분량',
+'시장 앞 제2주차장은 진입로가 막히므로 [남대천 둔치 제1공영주차장] 또는 [월화거리 주차장] 이용 · 닭강정·회·꼬막비빔밥은 점심 식사 중 전화로 포장 주문해 대기 단축 · 엄지네는 매장 앞·주변 공터 주차',
+'차 안에 갇혀 있지 않고 [월화역] 포토존·인형 구경 + 평지 [월화거리] 짧게 걷기 · 꼬막비빔밥은 고추가 들어가 하린이 몫에서 제외',
+'시장 골목 인파나 차 안 대기 없이, 따뜻한 카페 좌석에서 하린이와 오붓하게 다과']),
+S('16:00 ~ 17:50', '치즈바다 풀빌라 체크인 & 실내 온수풀·족욕', [
+'16:00 체크인 & 웰컴 티타임 · 하린이 & 엄빠 – 실내 미온수풀 1차 물놀이 · 어머님 – 실내 창가 다과상 + 따뜻한 족욕(풋스파). 테라스 데이베드는 햇볕 좋을 때 10~15분만',
+'체크인 후 30분 하린이 휴식 먼저 → 16:30~17:20 1차 물놀이 (50분으로 컨디션 조절) · 어머님 – 객실 안마기/온돌 공간 휴식',
+'이동 피로로 졸려하면 1차 물놀이를 다음 날로 넘기고 실내 스파 힐링 · 숙소 앞 [사천해변 소나무 숲길] 유모차 산책은 바람이 잦아들 때만, 물가 접근 금지'], null, [
+'오후 동해안 강풍 가능, 체감온도 하락 · 21~22일 동해안 너울 예보 → 해변 물가 가까이 가지 않기',
+'[강릉 치즈바다 풀빌라] 강원 강릉시 사천면 중앙서로 92-76 (010-8686-1892) · 사천진해변·하평해변 인근 단지 (객실 오션뷰 아님) · [응급] 강릉아산병원 응급실 – 숙소와 같은 사천면 (주소·연락처 출발 전 확인)',
+'체크인 15:00 / 체크아웃 10:30~11:00 · 개별 바비큐(숯+그릴) 1세트 30,000원 · 온수풀 32~34도 미온수',
+'단지 내 전용 주차장, 객실 바로 앞 하차 · 중앙시장에서 차량 약 20분 · 체크인 때 실내 전기그릴·자이글 비치 여부와 숯불 취소 가능 여부 확인',
+'입실 즉시 회·소고기·유아식 냉장 보관 · 물놀이 전 실내 난방 온도 올리고, 대형 바스타월 2장·로션·기저귀·내복을 욕실 앞에 세팅 · 출수 후 머리까지 완전히 말리기',
+'따뜻한 거실 테이블에 강릉 명물 간식(수제 한과·감자빵·따뜻한 꽃차) 다과상, 무릎담요 함께']),
+S('18:00 ~ 19:00 사이 시작', '실내 그릴 만찬 & 중앙시장·엄지네 포장 미식', [
+'실내 다이닝룸 전기그릴·자이글 만찬 · 어른 – 한우/돼지 구이 + 활어회 & 닭강정 + 엄지네 꼬막비빔밥 + 하이볼 (어른 3명 기준 회·꼬막은 소자로) · 활어회는 아이스박스에 보관하거나 저녁 직전 사천진항 횟집에서 포장 · 하린이 – 유아식(밥·반찬) + 무염 1등급 한우 안심 & 구운 단호박·버섯',
+'식사 30분 전 바람이 잦아들면 숯불 점화 → 남편만 테라스에서 굽고, 가족은 따뜻한 실내 식탁에서 식사 (원안 숯불 바비큐의 절충안)',
+'그릴 준비가 늦어지면 실내 주방 프라이팬으로 하린이 소고기·채소를 먼저 무염으로 구워 식사 완료 → 어른은 포장 음식 위주'], null, [
+'저녁 동해안 10℃ 안팎 + 바람 → 테라스 식사 체감은 한 자릿수, 숯 연기 역류 우려',
+'치즈바다 풀빌라 실내 다이닝룸 (숯불 시 개별 바비큐 테라스)',
+'저녁 시작은 컨디션에 따라 18:00~19:00 사이 · 숯불을 쓸 경우 식사 30분 전 바람 확인 후 15분 전 점화 요청 · 식사 후 21:00 하린이 취침 루틴',
+'실내 그릴 사용 시 주방 환기팬·창문 환기 · 테라스 방풍 커튼 상태 점검',
+'[핵심 조리 순서] 어른 고기에 허브솔트·양념 뿌리기 전, 가장 깨끗한 첫 판에 하린이 몫(한우 안심 속살·아스파라거스·새송이·단호박)을 먼저 구워 아기 식가위로 잘라 식혀두기',
+'그릴 열기·연기가 가지 않는 창가 상석 배치 · 고기 익는 동안 활어회와 따뜻한 국(미역국/된장국)을 가장 먼저 대접'], '추천 (변경)')]},
+{ label: 'DAY 2', ymd: '2026-10-23', short: '10/23 금', date: '10월 23일 금요일',
+intro: "3일 중 가장 온화한 날이라 해변·카페 일정은 살리고, 이동을 줄이는 '숙소 앞 압축 동선'을 ★핫플 선택지로 더했습니다.",
+overview: [
+['06:40 전후', '(선택) 숙소 앞 사천진해변 일출 산책 15분', '해는 바다에서 뜸'],
+['08:30–09:35', '숙소 따뜻한 조식 & 오전 나들이 준비', '아침은 아직 쌀쌀', 'C: 09:00 기상, 브런치로 여유롭게'],
+['09:50–11:05', '오전 해변 첫 모래놀이 & 솔숲 데크 힐링 산책', '바람 약해지고 파고 낮음', 'A′: 숙소 앞 해변 · 이동 20분 → 5분'],
+['11:20–12:20', '강릉 별미 점심 (화덕생선구이 vs 한우불고기 vs 사천 향토식)', '실내', 'A′: 숙소 쪽 식당 → 12:15 숙소 복귀 · C: 12:15 전 식사 완료'],
+['12:30–16:15', '숙소 복귀 · 하린이 꿀낮잠 & 2차 온수풀 물놀이', '오후 가장 따뜻', 'A′: 12:15 낮잠 시작 · B: 15:20 이후 기상 시 물놀이 15:20~15:50 · C: 물놀이 생략, 15:30 기상'],
+['16:45–18:05', '사천 오션뷰 카페 티타임 & 대게 픽업 스마트 동선', '일몰 17:40 전후'],
+['18:00~19:00 사이', '숙소 주문진 대게 만찬 & 게딱지 볶음밥', '—']],
+slots: [
+S('08:30 ~ 09:35', '숙소 따뜻한 조식 & 오전 나들이 준비', [
+'어른 – 따뜻한 황태해장국/전복죽(간편 조리) + 베이커리 & 모닝커피 · 하린이 – 준비해 간 아침 유아식 · (선택) 06:40 어머님·남편 숙소 앞 사천진해변 일출 산책 15분 (도보 또는 차량 3분) – 하린이는 엄마와 숙소에서 계속 수면',
+'어른 – 속 편한 누룽지탕 & 반찬 + 과일·커피 · 하린이 – 유아식 + 아기 치즈·바나나',
+'아침잠이 많으면 기상 09:00, 브런치 형태로 여유롭게 → 해변은 A′ 압축 동선(숙소 앞)으로'], null, [
+'23일 아침까지 평년보다 2~6℃ 낮음, 낮에는 평년 수준 회복 · 해변 나갈 땐 겉옷 한 겹 더',
+'치즈바다 풀빌라 실내 다이닝룸',
+'09:35~09:50 해변 외출 준비 완료',
+'출발 전 트렁크에 모래놀이 세트·유모차·여벌 옷 적재 확인',
+'아침 후 기저귀 교체 + 내복 위 플리스/바람막이 · 모래놀이 후 씻길 미온수(보온병 또는 페트병 2개)',
+'차가운 빵 대신 국물이나 죽 위주 · 일출 산책은 패딩·무릎담요·핫팩 + 보온병 따뜻한 차, 모래사장 대신 해변 입구 산책로에서 감상']),
+S('09:50 ~ 11:05', '오전 해변 첫 모래놀이 & 솔숲 데크 힐링 산책', [
+"[1순위: 송정해변 & 해송 솔숲길] 하린이 & 아빠 – 파도 잔잔하고 모래 고운 백사장에서 '생애 첫 모래놀이'·조개껍데기 줍기 · 어머님 & 엄마 – 백사장 뒤 소나무 솔숲 평지 데크 산책·벤치 휴식",
+'[2순위: 경포해변 무장애 데크로드] 유모차·어머님 보행이 가장 편한 해안 데크 산책 · 어머님은 해변 앞 1층 통창 카페에서 모래놀이 관람',
+'[3순위: 경포아쿠아리움 또는 허균 기념공원 숲길] 바람이 다시 강해지면 실내 수족관으로 즉시 전환'],
+['★ 압축 동선 (A′)', '숙소 앞 사천진·하평해변 모래놀이 + 사천 해송숲 산책 → 점심을 숙소 쪽(바담물회/연곡꾹저구탕)으로 · 이동 20분 → 5분, 하린이 낮잠 30분 추가 확보'], [
+'바람 약해지고 동해 파고 0.5~1.5m로 낮아짐 → 3일 중 모래놀이 최적 · 그래도 물가 1m 앞까지만',
+'[송정해변] 송정동 산1-4 일원 (무료주차장) · [경포해변] 창해로 473 (제1공영주차장 안현동 89-47) · [경포아쿠아리움] 난설헌로 131 (033-640-9800) · [사천진·하평해변] 숙소 앞 도보권',
+'해변 상시 개방, 공영주차장 무료 · [경포아쿠아리움] 10:00~18:00 (입장마감 17:00), 성인 20,000원, 36개월 미만 무료 (증빙 지참)',
+'송정은 솔숲 뒤 무료 주차장 → 데크까지 약 20m · 경포는 제1·제3주차장 이용 시 계단 없이 데크 진입 · A′는 숙소 주차 그대로 도보',
+'모래 만진 손으로 눈·입 비비지 않도록 밀착 케어 · 놀이 후 페트병 미온수로 손발 씻기고 보습 로션',
+'신발에 모래 들어가지 않도록 백사장 진입은 생략, 솔숲 데크와 전망 벤치(또는 카페 테라스)에서 바다 감상']),
+S('11:20 ~ 12:20', '강릉 별미 점심 (화덕생선구이 vs 한우불고기 vs 사천 향토식)', [
+'[1순위: 고선생 화덕생선구이] 화덕에서 기름기 뺀 모둠생선구이(고등어·삼치·임연수·열기) + 갓 지은 강릉 솥밥 – 어머님·아기 모두 호불호 없는 건강 한식',
+"[2순위: 강릉불고기 초당점] 생선구이 대기 시 5분 거리로 즉시 이동 · 달콤 담백한 '산더미 파 한우불고기'",
+'[3순위: 열해(창해로 오션뷰 한식) 또는 정은숙초당순두부] 12:30 낮잠 사수를 위해 대기 없는 대형 매장으로 우회, 12:15 전 식사 완료'],
+[['★ 핫플 (A′ 동선)', '[바담물회] 사천항 인근, 우럭미역국이 명물 – 미역국은 하린이 국으로도 OK · [연곡꾹저구탕] 1985년 개업, 전국 맛객이 찾는 향토 음식, 감자밥·수제비 · [대동면옥] 주문진에서 50년 넘은 막국수 & 수육'], ['★ 핫플 (시내)', '[고성생선찜(원인숙)] 가오리찜·모둠생선찜(코다리·가오리·도루묵·가자미 등) 매콤달콤 양념 전문, 현지인도 많이 찾는 생선찜집 – 송정해변에서 차량 약 10분']], [
+'실내 식사, 영향 없음',
+'[고선생] 해안로 286 2층 (0507-1373-2741) · [강릉불고기 초당점] 초당순두부길 2 (033-652-8800) · [열해] 창해로 31 2층 (033-653-3060) · [바담물회] 사천면 진리해변길 68-14 · [연곡꾹저구탕] 연곡면 진고개로 2679 · [대동면옥] 주문진읍 연주로 438 · [고성생선찜] 성덕포남로 56 (033-651-6959)',
+'[고선생] 10:00~21:30 (BT 16~17시, 연중무휴) · [강릉불고기] 10:00~20:30 (BT 15~17시, 수 휴무) · [바담물회·연곡꾹저구탕·대동면옥] 영업시간 전날 전화 확인 (연곡은 재료 소진 시 마감) · [고성생선찜] 평일 11:00~20:00 (브레이크타임·휴무일은 자료마다 달라 전화 확인) · ※ 11:20 도착이면 12시 피크 전이라 대기 적음',
+'고선생은 2층이지만 엘리베이터 완비 · 연곡꾹저구탕 주차 10여 대 · A′ 핫플 3곳은 숙소까지 5~15분 · 고성생선찜은 매장 뒤편 또는 원마트 옆 공영주차장',
+'유아식이 주식 · 흰살생선은 껍질 안쪽 속살만 발라 간·잔가시 두 번 확인 · 바담 미역국에 밥 말아 식혀서 · 대동면옥 수육은 살코기만 잘게 · 꾹저구탕 국물은 칼칼해 감자밥 위주 · 고성생선찜 양념은 매워 하린이는 유아식 위주',
+'고선생·강릉불고기 모두 쌈채소·나물 셀프바 · 가시 바른 생선을 어머님 앞접시에도 먼저 · 꾹저구탕은 부모님 동반 추천 후기가 많은 향토 보양식']),
+S('12:30 ~ 16:15', '숙소 복귀 · 하린이 꿀낮잠 & 2차 온수풀 물놀이', [
+'12:30~15:00 하린이 낮잠 (컨디션 회복 핵심 시간) & 어머님 숙소 휴식 · 15:00~16:15 2차 온수풀 물놀이 및 목욕·환복 · A′ 동선이면 12:15 복귀로 낮잠 시작이 앞당겨짐',
+'기상이 15:20 이후로 늦으면 깨우지 않고 물놀이를 30분(15:20~15:50)으로 단축 · 어머님은 테라스 티타임 또는 온돌방 낮잠',
+'오전 모래놀이로 에너지를 많이 썼다면 물놀이 생략 → 15:30까지 재우고 사천 해안도로 드라이브 후 카페로'], null, [
+'3일 중 오후가 가장 따뜻하고 바람 약함 → 테라스 티타임은 이날 오후가 적기',
+'치즈바다 풀빌라 (식당에서 차량 약 5~15분)',
+'낮잠 2시간 30분 확보 / 물놀이 약 1시간',
+'16:45 카페 외출을 고려해 16:00에 물놀이 마치고 머리 말리기 시작',
+'암막 커튼 + 백색소음으로 깊은 낮잠 유도 · 기상 직후 미온수 수분 보충 후 입수 · 물놀이 후 머리카락 속까지 드라이 (해 지면 바닷바람이 다시 차가워짐)',
+'오전 산책 피로를 풀 수 있도록 12:30~15:00 어머님 침실·거실을 조용하고 따뜻하게 유지']),
+S('16:45 ~ 18:05', '사천 오션뷰 카페 티타임 & 대게 픽업 스마트 동선', [
+"[카페 '곳(GOT)'에서 가족 티타임 중 남편만 25분 픽업] 16:45 온 가족 사천 해변 대형 베이커리 카페 [곳] 방문 (천국의 계단 포토존·통유리 오션뷰·엘리베이터) → 17:30~17:55 남편만 10분 거리 주문진 다녀와 카페 앞에서 가족 태우고 18:05 숙소 복귀",
+'1순위 만석 시 바로 옆 [바우카페(흑임자 라떼 명소)] · 또는 주문진 방향 [백야커피(1~3층 엘리베이터·유아의자·우유크림빵)]에 가족을 내려주고 남편이 바로 옆 주문진 시장에서 대게 픽업 후 합류',
+"주문진 대게타운의 '사천권 숙소 배달/퀵 가능 매장'에 사전 주문 → 남편도 이동 없이 카페 [곳]에서 함께 쉬고 18:00~19:00 사이 원하는 시간에 숙소에서 배달 수령"], null, [
+'일몰 17:40 전후 · 동해는 해가 서쪽 산 너머로 지므로 바다 위 노을 대신 분홍빛 하늘·블루아워가 포인트 · 해 진 뒤 기온 빠르게 하강',
+'[카페 곳] 사천면 진리해변길 143 (033-646-4500) · [바우카페] 사천면 진리해변길 109-1 · [백야커피] 해안로 607 1~3층 · [주문진 수산시장/대게타운] 주문진읍 시장길 38 일원',
+"[카페 곳] 매일 09:00~21:00 · [바우카페] 10:00~21:30 (셋째 주 수 휴무) · [백야커피] 매일 09:00~21:00 · ※ 대게 찜 25~30분 → 16:00경 전화로 저녁 시간(18:00~19:00)에 맞춘 픽업 시각 지정 선주문 필수",
+'카페 [곳]·[백야커피] 모두 넓은 전용 주차장·엘리베이터 · [곳] → 주문진 대게거리 해안도로 편도 약 10~12분',
+'물놀이 후 출출할 때 카스텔라/우유크림빵과 우유(또는 챙겨간 간식) · 유아의자에 앉아 통창 너머 파도 구경 · 카페 나설 때 겉옷 다시 입히기',
+'16:45 도착 즉시 통창 창가석 선점 · 어머님 인생 사진은 17:30~17:50 블루아워, 실내 조명이 켜지기 직전이 가장 예쁨']),
+S('18:00 ~ 19:00 사이 시작', '숙소 주문진 대게 만찬 & 게딱지 볶음밥', [
+"어른 – 갓 쪄낸 주문진 대게 세트 + 게딱지 내장 볶음밥 + 해물라면 · 하린이 – 유아식을 먼저 먹인 뒤, '게살전으로 게 도입이 완료된 상태'라면 완전히 익은 다리 속살을 간 확인 후 소량 맛보기",
+'어른 – 주문진 대게 + 게딱지 볶음밥 · 하린이 – 갑각류 알레르기 예방과 저녁 컨디션을 위해 맛보기 생략, 유아식(밥·소고기/두부 반찬)만',
+'대게와 함께 어머님 취향의 익힌 모둠 해산물(전복찜·가리비찜)을 포장해 해산물 한 상'], null, [
+'실내 식사, 영향 없음',
+'치즈바다 풀빌라 다이닝룸',
+'저녁 시작은 컨디션에 따라 18:00~19:00 사이 · 픽업 직후 보온 포장 상태로 바로 만찬 시작',
+'대게 전용 가위·포크·비닐장갑·물티슈 + 껍질 밀봉용 대형 위생봉투 (실내 비린내 차단)',
+'[절대 원칙] 대게는 주식이 아님, 유아식으로 먼저 배 채우기 · 게살은 완전히 익은 다리 살만, 어른이 먼저 먹어보고 짠기 없을 때만 한두 입',
+"주문 시 '먹기 좋게 칼집 손질' 요청 · 살 꽉 찬 집게다리와 따뜻한 게딱지 볶음밥을 어머님 앞접시에 가장 먼저"])]},
+{ label: 'DAY 3', ymd: '2026-10-24', short: '10/24 토', date: '10월 24일 토요일',
+intro: '비 소식은 없지만 대관령은 강릉보다 4~6℃ 낮다고 보고, 목장은 그대로 가되 노천 트랙터마차용 방한을 한 단계 올렸습니다.',
+overview: [
+['08:30–10:30', '따뜻한 한식 아침 식사 & 체크아웃', '강릉 아침 쌀쌀', 'B: 09:00 외식 조식 · C: 10:00 체크아웃'],
+['11:20–12:35', '대관령 도착 & 미식 점심 (양갈비 vs 오삼불고기 vs 숙성 등심)', '실내'],
+['12:50–14:40', '대관령 하늘목장 건초주기 → 트랙터마차', '정상부 해발 1,000m급, 체감 한 자릿수', 'B: 낮잠 부족 시 마차 왕복 + 하단 목장카페 휴식'],
+['14:40–19:00', '대관령 출발 → 양주 도착 (하린이 낮잠 & 저녁 휴게소)', '중부 구름많음, 비 없음', 'B: 정체 시 휴게소 저녁, 19:30 이후 도착']],
+slots: [
+S('08:30 ~ 10:30', '따뜻한 한식 아침 식사 & 체크아웃', [
+'08:30 따뜻한 밥과 국(소고기미역국/사골곰탕)으로 든든한 아침 · 10:30 체크아웃 후 대관령 이동 (약 45분) – 이동 중 카시트에서 하린이 짧은 낮잠 유도',
+'숙소 조리를 줄이고 싶으면 09:00 외식 조식 후 출발 – 초당순두부·황태해장국 또는 ★[짬뽕순두부 초당애] 경포호 뷰 2층, 순두부백반·모두부로 순한 아침',
+'체크아웃을 10:00로 30분 앞당겨 대관령 양떼목장/하늘목장 초입 드라이브 코스 경유'], null, [
+'강릉 아침 10℃ 안팎(추정), 대관령 도착 시점은 이보다 4~6℃ 낮음 · 바람은 목요일보다 약해지는 흐름이나 당일 아침 재확인',
+'치즈바다 풀빌라 → 대관령 (강릉IC → 대관령IC) · [짬뽕순두부 초당애] 해안로 388 2층 (0507-1394-2284)',
+'10:30 체크아웃 엄수 · 사천 → 대관령 스위스램 약 40~45분 · [초당애] 08:00~20:00 (화 휴무 → 토요일 영업)',
+'퇴실 전 냉장고 속 유아식·아이스팩·아기 식기·충전기 누락 최종 확인',
+'[낮잠] 3일차는 점심·목장이 평소 낮잠 시간(12:30경)과 겹치므로 대관령 이동 중 카시트 낮잠 유도 (블랭킷·백색소음) · [방한 복장] 플리스/경량패딩·비니·목수건·운동화 준비 · 카시트 안전을 위해 두꺼운 패딩은 차에 실어 두고, 대관령 도착 후 내리기 전 차 안에서 입히기',
+'귀경길 장거리를 대비해 한식으로 든든히 · 패딩 코트·스카프·편한 워킹화, 핫팩은 주머니에 미리']),
+S('11:20 ~ 12:35', '대관령 도착 & 미식 점심', [
+'[1순위: 스위스램 11:30 사전 예약] 호주산 프렌치렉·숄더렉 양갈비 & 시골 된장찌개 · 직원이 구워주는 부드러운 양고기로 온 가족 보양 점심',
+'[2순위: 예약 마감 시 11:20 오픈런 또는 대관령한우타운] 어머님이 양고기를 낯설어하시면 5분 거리 한우타운에서 1등급 한우 구이 & 한우곰탕',
+'[3순위: 황태회관 대관령 본점] 대기 없이 넓은 로컬 명소 · 황태구이·황태전골·황태미역국'],
+['★ 핫플', '[납작식당] 1974년부터 이어온 횡계 오삼불고기 명가, 황태구이·막국수도 인기 · [부산식육식당] 식신 4.9, 숙성 등심과 불판에 끓이는 된장찌개 · ※ 탕수육 맛집 진태원은 테이블 5개·오픈 전 긴 대기·주차 불가라 이번 일정에서 제외'], [
+'실내 식사 · 주차장에서 식당까지 짧은 구간도 바람이 차니 겉옷 착용 후 하차',
+'[스위스램] 평창군 대관령면 대관령마루길 365-12 1층 (0507-1328-9272) · [대관령한우타운] 올림픽로 38 (033-336-2111) · [황태회관] 눈마을길 19 (033-335-5795) · [납작식당] 올림픽로 35 (033-335-5477) · [부산식육식당] 횡계 로터리 인근',
+'[스위스램] 11:00~20:00 (LO 19:00, 화 휴무), 토요일 전화/네이버 예약 필수 · [황태회관] 06:00~22:00 연중무휴 · [납작식당] 11:30~20:40 (BT 14:40~17:00, 화 휴무)',
+'스위스램·한우타운·황태회관·납작식당은 매장 앞 주차 · 부산식육식당은 로터리 부근 공영주차장 이용 · 스위스램 → 하늘목장 차량 약 10~12분',
+'[스위스램 주문 멘트] "아기 몫 양고기 1인분은 소금·후추·허브시즈닝 없이 생고기로 따로 빼서 속까지 완전히 익혀 주세요" · 뼈·근막 제거 후 속살만 잘게 · 납작식당 오삼은 매워 유아식 위주 · 부산식육 등심은 무염으로 먼저 한 점',
+'직원이 구워줘 연기·수고 없이 대화하며 식사 · 양고기 느끼함을 잡는 된장찌개와 공기밥 함께 주문']),
+S('12:50 ~ 14:40', '대관령 하늘목장 건초주기 → 트랙터마차 & 양떼 교감 체험', [
+'12:50 도착 후 매표소 옆 화장실 먼저 → 12:55~13:20 아기동물원·양떼 체험장 건초주기 먼저 · 13:30 [트랙터마차] 탑승, 정상 전망대까지 편안하게 (약 30분) · 정상 하차 후 체류는 10~15분 → 하산 후 바로 화장실·기저귀 정비하고 14:40 출발',
+'[어머님 무릎·체력 보호] 정상 조망 후 하산도 마차로 · 하단 [하늘카페/목장 마켓] 따뜻한 실내에서 어머님은 목장 우유 아이스크림·밀크티, 하린이네만 체험장 건초주기',
+'[강풍·한파 시 실내 플랜] [발왕산 케이블카 & 스카이워크(유모차·어머님 무보행 탑승)] 또는 [대관령 아기동물농장(실내형 먹이주기)]으로 전환'], null, [
+'정상부는 해발 1,000m급 + 노천 마차라 체감 한 자릿수 · 무릎담요 2장·핫팩·하린이 방풍 커버 필수 · 09시경 운행 여부 전화 확인',
+'[대관령 하늘목장] 평창군 대관령면 꽃밭양지길 458-23 (0507-1321-8061) · [대관령 아기동물농장] 대관령마루길 106 (033-335-1977)',
+'동절기(10~3월) 09:00~17:30 (매표 마감 16:30) · 입장료 대인 8,000원·소인 6,000원 (36개월 미만 무료) / 트랙터마차 대인 7,000원·소인 6,000원 / 건초주기 2,000원',
+'매표소 앞 대형 무료 주차장 · 13:30 마차는 주말 매진이 빨라 온라인 사전 예매 또는 12:50 도착 즉시 매표',
+'이동 중 낮잠을 못 잤다면 마차 후 무리하지 말고 플랜 B(하단 목장카페 휴식)로 전환 · 덜컹거림에 놀라지 않게 엄마/아빠가 안고 담요로 감싸기 · 건초주기는 아빠가 손 잡고 함께 → 직후 손소독티슈 + 세면대 손씻기',
+'[최우선] 마차 승하차 단차가 높아 남편이 아래에서 손 잡고 아내가 뒤에서 받쳐 부축 · 흔들림 적은 앞·중간 좌석 + 무릎담요']),
+S('14:40 ~ 19:00', '대관령 출발 → 양주 도착 (하린이 낮잠 & 저녁 휴게소)', [
+'14:40~15:00 출발 (토요일 상행 정체 대비 20분 당김 고려), 대관령IC 즉시 진입 · 하린이 카시트 꿀낮잠 (약 15:00~17:00) · 휴게소 1회 정차 후 18:30~19:00 양주 도착',
+'영동고속도로 상행 정체 시 내비 실시간 우회(서울양양고속도로 또는 국도) · 귀가가 19:30 이후면 [여주/이천/가평휴게소]에서 우동·국밥으로 이른 저녁',
+'출발 전 목장 카페에서 커피·간식 테이크아웃 + 기저귀·수유 재정비 후 초기 2시간 무정차'], null, [
+'중부 구름많음, 비 없음 · 24~25일 비는 남부·제주 중심이라 귀경길 영향 작음 (전날 밤 재확인)',
+'출발지: 대관령 하늘목장 (대관령IC 차량 10분) · 도착지: 경기도 양주시',
+'예상 약 3시간 30분 ~ 4시간 (토요일 상행 + 휴게소 1회)',
+'하린이가 깊이 잠든 출발 후 1시간 30분~2시간은 휴게소 들르지 않고 이동',
+'탑승 직후 두꺼운 외투 벗기고 실내 22~23℃ + 수면조끼/블랭킷 · 휴게소에서 저녁 유아식 데워 급여',
+'휴게소에서 따뜻한 호두과자·음료 챙겨드리고 편안한 음악과 함께 안전하게 복귀'])]}
+];
+
+const QUICK = [
+['1일차 점심', '10/22 (목) 13:00', ['농촌순두부 + 허균기념공원 솔숲 산책', '토담순두부 한옥 정원 + 포토타임', '동화가든 (테이블링 원격 줄서기) + 순두부젤라또', '김우정초당짬뽕순두부 · 서지초가뜰 한정식 · 초당장칼국수 · 포남사골옹심이'], '1순위 대기 15분 이상, 한옥·한정식 분위기를 원할 때'],
+['1일차 오후', '10/22 (목) 14:30', ['월화역 소품샵·카페 티타임 / 남편 닭강정·회 + 꼬막비빔밥 픽업', '초당 한옥·정원 카페 / 남편 시장·마트 후 합류', '시장 생략 → 하나로마트 + 사천진항 횟집 포장', '엄지네포장마차 꼬막비빔밥 포장 · 강릉빵명장'], '시장 인파가 많거나 바람이 강해 야외를 줄이고 싶을 때'],
+['1일차 저녁', '10/22 (목) 18:00~19:00', ['실내 전기그릴 만찬 (날씨로 변경)', '숯불은 남편만 테라스, 식사는 실내', '주방 프라이팬 + 포장 음식 위주', '—'], '식사 30분 전 테라스 바람 세기'],
+['2일차 오전', '10/23 (금) 09:50', ['송정해변 첫 모래놀이 + 해송 솔숲 데크', '경포해변 무장애 데크 + 통창 카페', '경포아쿠아리움 / 허균 기념공원 숲길', 'A′ 숙소 앞 사천진·하평해변 압축 동선'], '아침잠이 길거나 낮잠 시간을 더 확보하고 싶을 때'],
+['2일차 점심', '10/23 (금) 11:20', ['고선생 화덕생선구이', '강릉불고기 초당점', '열해 / 정은숙초당순두부', '바담물회 · 연곡꾹저구탕 · 대동면옥 · 고성생선찜'], 'A′ 동선을 택했거나 향토 음식을 원할 때'],
+['2일차 오후', '10/23 (금) 16:45', ['카페 곳 티타임 중 남편만 대게 픽업', '바우카페 / 백야커피 동행 후 픽업', '대게 숙소 배달·퀵', '—'], '카페 만석, 남편 이동이 부담될 때'],
+['3일차 점심', '10/24 (토) 11:30', ['스위스램 양갈비 (11:30 예약)', '대관령한우타운 1등급 한우', '황태회관', '납작식당 오삼불고기 · 부산식육식당 숙성 등심'], '양갈비 예약 마감, 어머님이 양고기를 낯설어하실 때'],
+['3일차 목장', '10/24 (토) 12:50', ['하늘목장 트랙터마차 + 건초주기', '마차 왕복 + 하단 목장카페 휴식', '발왕산 케이블카 / 실내 아기동물농장', '—'], '09시 운행 확인, 정상부 강풍·추위가 심할 때']
+];
+const QK = [['A 기본', 'var(--sea)'], ['B 휴식', 'var(--pine)'], ['C 우회', 'var(--clay)'], ['★ 핫플', 'var(--hot)']];
+
+const CHECK = [
+['대관령 스위스램 예약', '사전 예약', '출발 전 필수', '10/24(토) 11:30 성인 + 아기 1명(유아의자) · 하린이 몫 무염 생고기 별도 제공 가능 여부', '0507-1328-9272 (화 휴무)', '남편/아내'],
+['하늘목장 & 마차 예매', '사전 예약', '출발 전 필수', '입장권 + 13:30 트랙터마차 온라인 예매 · 36개월 미만 무료 증빙(등본/건강보험증 사진) 저장', '0507-1321-8061 (네이버 예약)', '남편/아내'],
+['★ 강풍·너울 특보 확인', '날씨', '10/21 밤 · 10/22 아침', '기상청 날씨누리에서 강원 동해안 강풍특보·너울 해제 여부', '해제 전이면 해변 물가 접근 금지', '남편'],
+['★ 풀빌라 실내 그릴 문의', '숙소', '출발 전', '실내 전기그릴·자이글 비치 여부, 숯불 바비큐 취소·변경 가능 여부', '010-8686-1892', '아내'],
+['중앙시장 먹거리 전화 주문', '당일 선주문', '1일차 12:30경', '닭강정(배니/명성 등)·활어회 포장 → 14:45 픽업 · 동화가든(C) 이용 시 12:00경 테이블링', '강릉중앙시장 일원', '남편'],
+['★ 엄지네 꼬막비빔밥 포장', '당일 선주문', '1일차 12:30경', '꼬막비빔밥 포장 (어른 3명 기준 소량) → 15:40 전후 숙소 가는 길에 픽업', '경강로2255번길 21 (월 휴무)', '남편'],
+['★ 압축 동선 점심 영업 확인', '전화 확인', '1일차 저녁', '바담물회·연곡꾹저구탕·대동면옥 금요일 영업시간', '미확인 시 원안 A(송정+고선생)', '아내'],
+['주문진 대게 찜·손질 선주문', '당일 선주문', '2일차 16:00경', '저녁 시작(18:00~19:00) 20분 전 픽업 또는 숙소 배달 · 맞춤 찜·칼집 손질·게딱지 볶음밥', '주문진 수산시장/대게타운', '남편'],
+['★ 하늘목장 운행 확인', '전화 확인', '3일차 09:00', '트랙터마차 정상 운행 여부 · 불가 시 C(발왕산/아기동물농장)', '0507-1321-8061', '남편'],
+['끼니별 유아식 & 조리도구', '하린이 식사', '출발 전', '유아식 밥·반찬(보냉백+아이스팩), 보온죽통, 전자레인지 용기 · 아기 식가위·수저·포크·턱받이·빨대컵 · 게살전 알레르기 도입 여부 최종 확인', '숙소 입실 즉시 냉장/냉동', '아내'],
+['온수풀·해변·대관령 방한용품', '하린이 활동', '출발 전', '[물놀이] 수영복, 방수기저귀 3~4매, 튜브, 바스타월 2~3장, 워시·로션 · [해변] 모래놀이 세트, 페트병 2개, 손소독티슈 · [대관령] 방풍 패딩/플리스, 비니, 목수건, 여벌 내복·양말 · ★ 방풍 커버', '대관령은 해변보다 4~6℃ 낮음', '아내/남편'],
+['어머님 맞춤 편의 용품', '어머님 배려', '출발 전', '목베개·무릎담요·발받침 쿠션 · 캐시미어/울 스카프, 편한 워킹화 · 테라스 티타임용 차·다과 · ★ 트랙터마차용 무릎담요 2장 + 핫팩 4개', '마차 승하차 시 양옆 부축', '남편/아내'],
+['★ 기본 육아용품 · 상비약', '하린이 건강', '출발 전', '일반 기저귀·물티슈 넉넉히 · 어린이 해열제·체온계 · 평소 쓰던 상비약·반창고', '응급 시 강릉아산병원 응급실 (숙소와 같은 사천면, 주소·연락처 출발 전 확인)', '아내'],
+['★ 신규 맛집 영업 확인', '전화 확인', '출발 전', '[포남사골옹심이] 목요일 대기 (테이블링 원격 줄서기 가능) · [고성생선찜] 금요일 영업 여부·휴무일·브레이크타임 (자료마다 다름)', '033-647-2638 / 033-651-6959', '아내'],
+['★ 차량 준비', '이동', '출발 전날', '성에 제거 스프레이, 09:20 시동 · 24~25일 귀경길 예보 재확인', '경기 북동부 아침 영하권', '남편']
+];
+
+const PACK = [
+['하린이 식사', [
+['유아식 밥·반찬 (끼니별 여유분)', '보냉백 + 아이스팩', '전 일정'],
+['보온죽통 · 전자레인지 용기', '휴게소에서 데워 급여', '1·3일차 이동'],
+['아기 전용 식가위', '고기·생선 살 발라내기용', '전 식사'],
+['아기 수저·포크 · 빨대컵', '', '전 식사'],
+['일회용 턱받이', '', '전 식사'],
+['핑거푸드 (떡뻥·치즈)', '앞좌석 비치', '차량 이동']]],
+['물놀이 (온수풀)', [
+['아기 수영복', '', '1·2일차 오후'],
+['방수기저귀', '3~4매', '1·2일차 오후'],
+['목튜브/보행기튜브', '', '1·2일차 오후'],
+['대형 바스타월', '2~3장', '1·2일차 오후'],
+['아기 워시·로션', '', '1·2일차 오후']]],
+['해변 모래놀이', [
+['모래놀이 세트', '트렁크에 미리 적재', '2일차 오전'],
+['빈 페트병 / 보온병', '2개 · 손발 씻길 미온수', '2일차 오전'],
+['손소독티슈', '', '2일차 · 3일차 목장'],
+['여벌 옷', '', '2일차 오전'],
+['유모차', '', '전 일정']]],
+['하린이 방한 (대관령)', [
+['방풍 패딩/플리스 · 경량패딩', '카시트에선 벗기고 하차 전 입히기', '1일차 휴게소 · 3일차'],
+['바람막이 점퍼 · 방풍 카디건', '', '1일차 · 2일차 해변'],
+['비니 모자 · 목수건', '', '3일차 목장'],
+['여벌 내복 · 양말', '', '전 일정'],
+['운동화', '', '3일차 목장'],
+['★ 방풍 커버', '', '3일차 트랙터마차']]],
+['차량 이동 · 잠자리', [
+['스티커북 · 사운드북', '앞좌석 비치', '1·3일차 이동'],
+['수면조끼 / 블랭킷', '실내 22~23℃ 맞추기', '3일차 귀경길'],
+['★ 성에 제거 스프레이', '09:20 시동', '1일차 출발'],
+['충전기', '퇴실 전 누락 확인', '전 일정']]],
+['어머님 편의 용품', [
+['목베개 · 벨벳 무릎담요 · 발받침 쿠션', '뒷좌석 세팅', '차량 이동'],
+['캐시미어/울 스카프', '', '해변 · 대관령'],
+['패딩 코트 · 편한 워킹화', '', '3일차'],
+['★ 트랙터마차용 무릎담요', '2장', '3일차 목장'],
+['★ 핫팩', '4개 · 주머니에 미리', '3일차 목장'],
+['어머님 선호 차 (전통차/디카페인 커피) · 다과', '테라스 티타임용', '숙소']]],
+['★ 기본 육아용품 · 상비약', [
+['일반 기저귀', '2박 3일 넉넉히', '전 일정'],
+['물티슈', '대용량 + 휴대용', '전 일정'],
+['어린이 해열제 · 체온계', '', '전 일정'],
+['평소 쓰던 상비약 · 반창고', '', '전 일정'],
+['응급 연락처 메모', '강릉아산병원 응급실 · 숙소 010-8686-1892', '전 일정']]],
+['먹거리 포장 · 대게 도구', [
+['아이스박스 · 아이스팩 추가분', '1일차 활어회 보관', '1일차 오후'],
+['대게 전용 가위 · 포크', '', '2일차 저녁'],
+['비닐장갑 · 물티슈', '', '2일차 저녁'],
+['대형 위생봉투', '껍질 밀봉 · 비린내 차단', '2일차 저녁']]],
+['서류 · 예약', [
+['36개월 미만 무료 증빙', '등본/건강보험증 사진 스마트폰 저장', '2일차 아쿠아리움 · 3일차 목장'],
+['예약 확인 (스위스램 · 하늘목장 마차)', '11:30 / 13:30', '3일차']]]
+];
+
+const SOURCES = ['기상청 단기예보 종합 (10/21 11시 발표)', '국제뉴스 — 강원도 22일 기온·강풍특보 예보', '미디어파인 — 10월 22일 지역별 기온', '한국사회복지저널 — 21~24일 기온·너울 예보', '톱스타뉴스 — 23~24일 전국 예보', '하늘목장 동절기 운영시간', '김우정초당짬뽕순두부 · 동화가든 · 짬뽕순두부 초당애 · 납작식당', '엄지네포장마차 (식신) · 엄지네 영업시간 · 부산식육식당 (식신)', '서지초가뜰 · 연곡꾹저구탕 · 진태원 후기 · 바담물회·9남매두부집', '초당장칼국수 · 대동면옥', '포남사골옹심이 (테이블링 · 강릉무장애관광센터 · 다이닝코드)', '원인숙 고성생선찜 (트리플 · 다이닝코드 · 관광지랭킹)'];
+
+const MOVES = {
+'DAY 1': { route: '양주 → 내린천휴게소 → 초당순두부마을 → 강릉중앙시장 → 치즈바다 풀빌라', drive: '하루 운전 약 3시간 20분 (휴게소 정차 30분 별도)', legs: [
+['양주 → 내린천휴게소 → 초당순두부마을', '약 3시간 20분 (휴게소 30분 포함)'],
+['초당순두부마을 도착 · 포남사골옹심이 선택 시', '초당에서 차량 약 10분'],
+['초당 → 남대천 제1공영주차장', '차량 약 10분'],
+['중앙시장 → 엄지네(포장 픽업) → 치즈바다 풀빌라', '차량 약 25~30분 (픽업 5분 포함)'],
+['숙소 내', '이동 없음']] },
+'DAY 2': { route: '숙소 → 송정해변 → 고선생(점심) → 숙소 → 카페 곳 → 숙소', drive: '가족 운전 약 50분 + 남편 주문진 왕복 약 25분 · A′ 압축 동선은 약 20분', legs: [
+['숙소 내 · 일출 산책은 숙소 앞 사천진해변', '도보 또는 차량 3분'],
+['숙소 → 송정해변 무료주차장', '차량 약 20분 · A′는 숙소 앞 도보 5분'],
+['송정해변 → 고선생 화덕생선구이', '차량 약 5분 · 강릉불고기·고성생선찜 약 10분'],
+['식당 → 숙소', '차량 약 10~15분 · 고성생선찜에서는 약 25분'],
+['숙소 → 카페 곳', '차량 약 5분 · 남편 주문진 왕복 약 25분'],
+['카페 곳 → 숙소', '차량 약 5분']] },
+'DAY 3': { route: '숙소 → 대관령 스위스램 → 하늘목장 → 대관령IC → 양주', drive: '하루 운전 약 4시간 40분~5시간 (휴게소 1회 포함)', legs: [
+['숙소 내', '이동 없음 · 외식 조식 시 초당·경포권 약 15~20분'],
+['사천 숙소 → 스위스램 (강릉IC → 대관령IC)', '차량 약 40~45분 · 이동 중 하린이 낮잠'],
+['스위스램 → 대관령 하늘목장', '차량 약 10~12분'],
+['하늘목장 → 대관령IC → 양주', '약 3시간 30분~4시간 (휴게소 1회 포함)']] }
+};
+
+/* ---------- helpers ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const split = s => s.split(' · ').map(x => { const m = x.match(/^\[([^\]]+)\]\s*(.*)$/); return m ? { h: m[1], t: m[2] } : { h: '', t: x }; });
+const PHONE = /(0\d{1,3}-\d{3,4}-\d{4})/g;
+const fmt = s => esc(s).replace(PHONE, p => `<a class="tel" href="tel:${p.replace(/-/g, '')}">${p}</a><button class="copy" data-copy="${p}" type="button">복사</button>`);
+const mapUrl = (name, region) => 'https://map.naver.com/p/search/' + encodeURIComponent((/휴게소|IC/.test(name) ? '' : region + ' ') + name.replace(/\(.*?\)/g, '').replace(/^(1|2|3)순위:\s*/, '').trim());
+function itemsHtml(list, opt = {}) {
+  return '<ul class="items">' + list.map(it => {
+    const map = opt.map && it.h && !/응급|핵심|절대|최우선|낮잠|방한|스위스램 주문/.test(it.h) ? `<a class="maplink" href="${mapUrl(it.h, opt.region)}" target="_blank" rel="noopener">지도</a>` : '';
+    return `<li>${it.h ? `<b>${esc(it.h)}</b> ` : ''}${fmt(it.t)}${map}</li>`;
+  }).join('') + '</ul>';
+}
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('gn-trip:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('gn-trip:' + k, JSON.stringify(v)); } catch (e) {} }
+};
+
+/* ---------- time (KST) ---------- */
+function kstNow() { const d = new Date(Date.now() + 9 * 3600e3); return { ymd: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes() }; }
+const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+function slotRanges(day) {
+  return day.slots.map((s, j) => {
+    const ts = s.time.match(/\d{1,2}:\d{2}/g) || [];
+    const start = toMin(ts[0]);
+    const next = day.slots[j + 1];
+    let end = next ? toMin(next.time.match(/\d{1,2}:\d{2}/)[0]) : (/사이/.test(s.time) ? 21 * 60 : toMin(ts[1] || ts[0]));
+    if (!next && /사이/.test(s.time)) end = 21 * 60;
+    return [start, end];
+  });
+}
+
+/* ---------- state ---------- */
+const now = kstNow();
+const todayIdx = DAYS.findIndex(d => d.ymd === now.ymd);
+const state = {
+  tab: store.get('tab', 'plan'),
+  day: todayIdx >= 0 ? todayIdx : store.get('day', 0),
+  plan: store.get('plan', {}),
+  checks: store.get('checks', {}),
+  prepSeg: store.get('prepSeg', 'check')
+};
+
+function dChip() {
+  const start = Date.UTC(2026, 9, 22), t = Date.UTC(...now.ymd.split('-').map((v, i) => i === 1 ? v - 1 : +v));
+  const diff = Math.round((t - start) / 864e5);
+  if (diff < 0) return diff === -1 ? '내일 출발' : 'D' + diff;
+  if (diff <= 2) return `여행 ${diff + 1}일차`;
+  return '여행 완료';
+}
+
+/* ---------- render: days ---------- */
+function renderDaySeg() {
+  document.getElementById('dayseg').innerHTML = DAYS.map((d, i) =>
+    `<button role="tab" type="button" data-day="${i}" aria-selected="${i === state.day}"><b>${d.label}</b><span>${d.short}${i === todayIdx ? ' · 오늘' : ''}</span></button>`).join('');
+  document.getElementById('dayseg').hidden = state.tab !== 'plan';
+}
+
+function renderPlan() {
+  const d = DAYS[state.day], mv = MOVES[d.label], w = WEATHER[state.day];
+  const ranges = slotRanges(d);
+  const isToday = state.day === todayIdx;
+  const nowSlot = isToday ? ranges.findIndex(([a, b]) => now.min >= a && now.min < b) : -1;
+  const slotStarts = d.slots.map(s => s.time.match(/\d{1,2}:\d{2}/)[0]);
+
+  let h = `<div class="card">
+    <div class="eyebrow">${d.label} · ${esc(d.date)}</div>
+    <h2>${['강릉으로 출발하는 날', '바다와 낮잠의 날', '대관령 거쳐 집으로'][state.day]}</h2>
+    <p class="small" style="margin:0">${esc(d.intro)}</p>
+    <div class="wxline">
+      <span class="pill wx">강릉 ${esc(w[1])}</span>
+      <span class="pill wx">대관령 ${esc(w[2])}</span>
+      <span class="pill">${esc(w[3])}</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">동선</div>
+    <div class="route">${mv.route.split(' → ').map(s => `<span class="stop">${esc(s)}</span>`).join('<span class="arr">→</span>')}</div>
+    <p class="small muted" style="margin:8px 0 0">${esc(mv.drive)} · 이동 시간은 평시 기준 추정치라 당일 내비로 다시 확인하세요.</p>
+  </div>
+  <div class="card">
+    <div class="eyebrow">하루 한눈에</div>
+    <ol class="tl">${d.overview.map(([t, title, wx, alt]) => {
+      const first = (t.match(/\d{1,2}:\d{2}/) || [''])[0];
+      const j = slotStarts.indexOf(first);
+      const cls = [j < 0 ? 'nolink' : '', j >= 0 && j === nowSlot ? 'is-now' : ''].join(' ');
+      return `<li class="${cls}" ${j >= 0 ? `data-goto="${j}" tabindex="0" role="button"` : ''}>
+        <div class="t">${esc(t)}</div>
+        <div style="min-width:0"><div class="ti">${esc(title)}</div><div class="w">${esc(wx)}</div>${alt ? `<span class="alt">플랜별 시간 · ${esc(alt)}</span>` : ''}</div>
+      </li>`; }).join('')}</ol>
+  </div>`;
+
+  const region = state.day === 2 ? '평창 대관령' : '강릉';
+  d.slots.forEach((s, j) => {
+    const key = state.day + '-' + j;
+    const pi = state.plan[key] ?? 0;
+    const p = PL[pi];
+    const leg = mv.legs[j] || ['', ''];
+    const stars = s.star ? (Array.isArray(s.star[0]) ? s.star : [s.star]) : [];
+    h += `<article class="card slot ${j === nowSlot ? 'is-now' : ''}" id="slot-${j}">
+      <div class="slot-h">
+        <div class="slot-time">${esc(s.time)}${j === nowSlot ? '<span class="nowtag">지금</span>' : ''}</div>
+        <h3>${esc(s.title)}</h3>
+      </div>
+      ${leg[0] ? `<div class="move"><span aria-hidden="true">🚗</span><span><b>${esc(leg[0])}</b> · ${esc(leg[1])}</span></div>` : ''}
+      <div class="ptabs" role="tablist">${PL.map((q, i) => `<button type="button" class="ptab" role="tab" data-key="${key}" data-p="${i}" aria-selected="${i === pi}" style="--pc:${q.c}"><span class="k">${q.k}</span>${esc(i === 0 && s.aTag ? s.aTag : q.tag)}</button>`).join('')}</div>
+      <div class="pbody" style="--pc:${p.c}">${itemsHtml(split(s.plans[pi]))}</div>
+      ${stars.map(([label, t]) => `<div class="hot"><div class="lbl">${esc(label)}</div>${itemsHtml(split(t))}</div>`).join('')}
+      <div class="wxbox"><span aria-hidden="true">☁︎</span><span>${esc(s.info[0])}</span></div>
+      <details class="more"><summary>위치·시간·주차·아이·어머님</summary>
+        <div class="info">${s.info.slice(1).map((t, i) => `<section style="--ic:${IK[i + 1][1]}"><h4>${IK[i + 1][0]}</h4>${itemsHtml(split(t), { map: i === 0, region })}</section>`).join('')}</div>
+      </details>
+    </article>`;
+  });
+  document.getElementById('v-plan').innerHTML = h;
+}
+
+/* ---------- render: quick ---------- */
+function renderQuick() {
+  document.getElementById('v-quick').innerHTML = `<div class="card">
+      <div class="eyebrow">현장 전환표</div>
+      <h2>상황 바뀌면 여기서 고르기</h2>
+      <p class="small muted" style="margin:0">바꿔야 할 핵심 일정만 골라 A·B·C 플랜과 ★핫플 대안을 한 화면에 모았습니다.</p>
+    </div>` + QUICK.map(([title, when, rows, rule]) => `<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>${esc(title)}</h3><span class="mono small muted">${esc(when)}</span></div>
+      <div style="margin-top:6px">${rows.map((t, i) => t === '—' ? '' : `<div class="qrow"><div class="qk" style="--qc:${QK[i][1]}">${QK[i][0]}</div><div style="min-width:0">${esc(t)}</div></div>`).join('')}</div>
+      <div class="rule"><b>전환 기준</b> ${esc(rule)}</div>
+    </div>`).join('');
+}
+
+/* ---------- render: prep ---------- */
+function renderPrep() {
+  const ck = state.checks;
+  const totalC = CHECK.length, doneC = CHECK.filter((_, i) => ck['c' + i]).length;
+  const packKeys = []; PACK.forEach((g, gi) => g[1].forEach((_, ii) => packKeys.push('p' + gi + '-' + ii)));
+  const doneP = packKeys.filter(k => ck[k]).length;
+  const seg = state.prepSeg;
+  let h = `<div class="seg" role="tablist">
+      <button type="button" data-seg="check" aria-selected="${seg === 'check'}">예약·확인 ${doneC}/${totalC}</button>
+      <button type="button" data-seg="pack" aria-selected="${seg === 'pack'}">준비물 ${doneP}/${packKeys.length}</button>
+    </div>`;
+  if (seg === 'check') {
+    h += `<div class="card"><div class="prog"><div class="bar"><i style="width:${doneC / totalC * 100}%"></i></div><span class="mono">${doneC}/${totalC}</span></div>
+      <p class="small muted" style="margin:8px 0 0">★는 날씨·핫플 반영으로 새로 생긴 항목이에요. 체크 표시는 이 폰에만 저장돼요.</p></div>
+      <div class="card">${CHECK.map(([title, cat, when, txt, note, who], i) => {
+        const star = title.startsWith('★ ');
+        const on = !!ck['c' + i];
+        return `<label class="chk ${on ? 'done' : ''}"><input type="checkbox" id="c${i}" data-ck="c${i}" ${on ? 'checked' : ''}>
+          <div style="min-width:0"><div class="ttl">${star ? '<span class="star">★</span> ' : ''}${esc(star ? title.slice(2) : title)}</div>
+          <div class="meta"><span class="pill">${esc(cat)}</span><span class="pill wx">${esc(when)}</span><span class="pill">담당 · ${esc(who)}</span></div>
+          ${itemsHtml(split(txt))}<div class="note">${fmt(note)}</div></div></label>`; }).join('')}</div>`;
+  } else {
+    h += `<div class="card"><div class="prog"><div class="bar"><i style="width:${doneP / packKeys.length * 100}%"></i></div><span class="mono">${doneP}/${packKeys.length}</span></div></div>`;
+    h += PACK.map(([name, items], gi) => `<div class="card"><h3 style="margin-bottom:4px">${name.startsWith('★') ? '<span class="star">★</span>' + esc(name.slice(1)) : esc(name)}</h3>
+      ${items.map(([n, m, w], ii) => { const k = 'p' + gi + '-' + ii, on = !!ck[k]; return `<label class="pk ${on ? 'done' : ''}"><input type="checkbox" id="${k}" data-ck="${k}" ${on ? 'checked' : ''}>
+        <div style="min-width:0"><div class="n">${n.startsWith('★') ? '<span class="star">★</span>' + esc(n.slice(1)) : esc(n)}</div>${m ? `<div class="m">${fmt(m)}</div>` : ''}</div><div class="w">${esc(w)}</div></label>`; }).join('')}</div>`).join('');
+  }
+  h += `<button type="button" class="ghost" id="resetChecks">체크 모두 지우기</button>`;
+  document.getElementById('v-prep').innerHTML = h;
+}
+
+/* ---------- render: info ---------- */
+function renderInfo() {
+  document.getElementById('v-info').innerHTML = `
+  <div class="card">
+    <div class="eyebrow">숙소 · 2박</div>
+    <h2>강릉 치즈바다 풀빌라</h2>
+    <div class="kv"><span class="k">주소</span><span>강원 강릉시 사천면 중앙서로 92-76 <a class="maplink" target="_blank" rel="noopener" href="https://map.naver.com/p/search/${encodeURIComponent('강릉 치즈바다 풀빌라')}">지도</a></span></div>
+    <div class="kv"><span class="k">연락처</span><span>${fmt('010-8686-1892')}</span></div>
+    <div class="kv"><span class="k">체크인 / 체크아웃</span><span class="mono">15:00 / 10:30~11:00</span></div>
+    <div class="kv"><span class="k">참고</span><span>사천진·하평해변 인근 단지 (객실 오션뷰 아님) · 온수풀 32~34도 · 개별 바비큐 1세트 30,000원</span></div>
+  </div>
+  <div class="card alert">
+    <h3>응급 시</h3>
+    <p class="small" style="margin:6px 0 0">강릉아산병원 응급실이 숙소와 같은 사천면에 있어요. 주소와 연락처는 출발 전에 한 번 확인해 두세요. <a class="maplink" target="_blank" rel="noopener" href="https://map.naver.com/p/search/${encodeURIComponent('강릉아산병원 응급실')}">지도</a></p>
+  </div>
+  <div class="card">
+    <div class="eyebrow">이번 주 날씨</div>
+    <p class="small" style="margin:4px 0 6px">3일 모두 비 소식은 없고, 목요일이 가장 춥고 바람이 강하며 금요일부터 평년 기온을 회복합니다. 기상청 10/21 11시 발표 기준이고 대관령 토요일 값은 추정이에요. 출발 당일 아침 강풍특보를 다시 확인하세요.</p>
+    ${WEATHER.map(([d, a, b, c, e]) => `<div class="wxday"><span class="d">${esc(d)}</span>
+      <span><b>강릉·동해안</b> ${esc(a)}</span><span><b>대관령·산지</b> ${esc(b)}</span><span><b>하늘·바람</b> ${esc(c)}</span><span class="muted small">바꾼 것: ${esc(e)}</span></div>`).join('')}
+    <p class="small muted" style="margin:8px 0 0">강릉 바다는 동쪽을 향해 있어 해는 바다에서 뜨고(06:45 전후) 산 쪽으로 집니다(17:40 전후). 저녁에는 바다 위 노을 대신 분홍빛 하늘과 블루아워를 보세요.</p>
+  </div>
+  <div class="card">
+    <div class="eyebrow">플랜 읽는 법</div>
+    <div class="legend" style="margin-top:6px">
+      <span style="color:var(--sea)"><b>A</b>미식과 감성 (기본 추천)</span>
+      <span style="color:var(--pine)"><b>B</b>휴식과 완만한 동선</span>
+      <span style="color:var(--clay)"><b>C</b>혼잡·악천후 대체</span>
+      <span style="color:var(--hot)"><b>★</b>평점·인기 검증된 대안 식당</span>
+    </div>
+    <p class="small muted" style="margin:8px 0 0">여행 방향: 맛집·바다·온수풀·대관령 목장 중심, 하린이 낮잠과 어머님 이동 편의 우선. 양주 출발 → 강릉 2박 → 대관령 경유 → 양주 복귀.</p>
+  </div>
+  <div class="card">
+    <div class="eyebrow">출처</div>
+    <ol class="src">${SOURCES.map(s => `<li>${esc(s)}</li>`).join('')}</ol>
+  </div>`;
+}
+
+/* ---------- shell ---------- */
+function showTab(t, scroll = true) {
+  state.tab = t; store.set('tab', t);
+  document.querySelectorAll('.tabbar button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
+  ['plan', 'quick', 'prep', 'info'].forEach(v => document.getElementById('v-' + v).hidden = v !== t);
+  document.getElementById('dayseg').hidden = t !== 'plan';
+  if (scroll) window.scrollTo(0, 0);
+}
+function renderAll() { renderDaySeg(); renderPlan(); renderQuick(); renderPrep(); renderInfo(); showTab(state.tab, false); }
+
+let toastT;
+function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 1600); }
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-day],[data-p],[data-goto],[data-seg],[data-copy],#resetChecks');
+  if (!t) return;
+  if (t.dataset.tab) return showTab(t.dataset.tab);
+  if (t.dataset.day) { state.day = +t.dataset.day; store.set('day', state.day); renderDaySeg(); renderPlan(); window.scrollTo(0, 0); return; }
+  if (t.dataset.p) { state.plan[t.dataset.key] = +t.dataset.p; store.set('plan', state.plan); const y = window.scrollY; renderPlan(); window.scrollTo(0, y); return; }
+  if (t.dataset.goto) { document.getElementById('slot-' + t.dataset.goto)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  if (t.dataset.seg) { state.prepSeg = t.dataset.seg; store.set('prepSeg', t.dataset.seg); renderPrep(); return; }
+  if (t.dataset.copy) {
+    e.preventDefault();
+    const v = t.dataset.copy;
+    try { navigator.clipboard.writeText(v).then(() => toast(v + ' 복사했어요'), () => toast('길게 눌러 번호를 복사하세요')); } catch (err) { toast('길게 눌러 번호를 복사하세요'); }
+    return;
+  }
+  if (t.id === 'resetChecks') { state.checks = {}; store.set('checks', {}); renderPrep(); toast('체크를 모두 지웠어요'); }
+});
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.goto) { e.preventDefault(); e.target.click(); } });
+document.addEventListener('change', e => {
+  const k = e.target.dataset && e.target.dataset.ck; if (!k) return;
+  if (e.target.checked) state.checks[k] = 1; else delete state.checks[k];
+  store.set('checks', state.checks);
+  const y = window.scrollY; renderPrep(); window.scrollTo(0, y);
+});
+
+document.getElementById('dchip').textContent = dChip();
+renderAll();
+if (state.tab === 'plan' && todayIdx >= 0) {
+  const r = slotRanges(DAYS[todayIdx]).findIndex(([a, b]) => now.min >= a && now.min < b);
+  if (r >= 0) setTimeout(() => document.getElementById('slot-' + r)?.scrollIntoView({ block: 'start' }), 150);
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {})); }
+</script>
+</body>
+</html>
