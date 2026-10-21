@@ -75,7 +75,7 @@ a { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
 svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
-.app { max-width: 640px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px calc(88px + env(safe-area-inset-bottom, 0px)); }
+.app { margin: 0; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px calc(88px + env(safe-area-inset-bottom, 0px)); }
 .view { display: flex; flex-direction: column; gap: 12px; }
 .view[hidden] { display: none !important; }
 
@@ -242,17 +242,7 @@ details.src ol { margin: 0; padding: 0 16px 16px 34px; font-size: 12px; color: v
 .toast.on { opacity: 1; }
 .cols, .col, .grid2, .masonry, .grp { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 @media (min-width: 720px) {
-  .app { max-width: 1040px; padding-left: max(28px, env(safe-area-inset-left, 0px)); padding-right: max(28px, env(safe-area-inset-right, 0px)); padding-top: 28px; }
-  .view { gap: 16px; }
-  h1 { font-size: 26px; }
-  .cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
-  #v-plan .cols { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
-  .col.sticky { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
-  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
-  .masonry { display: block; column-count: 2; column-gap: 16px; }
-  .masonry .grp { break-inside: avoid; margin-bottom: 16px; }
-  .masonry .grp .grp-t { margin-bottom: 0; }
-  .seg { max-width: 520px; }
+  .app { padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); padding-top: 24px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
@@ -599,6 +589,8 @@ const MOVES = {
 
 
 
+
+
 /* ---------- icons ---------- */
 const IC = {
   pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -714,7 +706,7 @@ function renderPlan() {
     ${temp ? `<div class="wxpill">${IC.sun}낮 ${esc(temp)}°</div>` : ''}</div>
     <div class="seg" role="tablist" style="grid-template-columns:repeat(3,minmax(0,1fr))">${DAYS.map((x, i) => `<button type="button" role="tab" data-day="${i}" aria-selected="${i === di}">${i + 1}일차 · ${x.short.slice(-1)}${i === todayIdx ? ' ·오늘' : ''}</button>`).join('')}</div>`;
 
-  h += '<div class="cols"><div class="col sticky">';
+  h += '<div class="cols"><div class="col">';
   if (focus >= 0) {
     const s = d.slots[focus], pi = planOf(di, focus), p = placeOf(s, pi);
     const firstT = split(s.plans[pi])[0].t; const sub = p ? p.name : (firstT.length > 34 ? firstT.slice(0, 33) + '…' : firstT);
@@ -733,7 +725,7 @@ function renderPlan() {
     h += `<div class="card pad"><b style="font-size:15px">오늘 일정을 모두 마쳤어요.</b><p class="lead">편히 쉬세요. 내일 일정은 위에서 다음 날을 눌러 보세요.</p></div>`;
   }
 
-  const routeOpen = state.open.route ?? (window.matchMedia && matchMedia('(min-width: 720px)').matches);
+  const routeOpen = !!state.open.route;
   h += `<details class="card route"${routeOpen ? ' open' : ''} data-key="route"><summary>오늘의 동선<span class="r">${esc(mv.drive.split(' (')[0].replace('하루 ', ''))}${IC.down}</span></summary>
     <div class="body"><div class="stops">${mv.route.split(' → ').map(x => `<span>${esc(x)}</span>`).join('<i>→</i>')}</div>
     <div>${esc(d.intro)}</div>
