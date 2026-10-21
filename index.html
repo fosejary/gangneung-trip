@@ -3,194 +3,233 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1f5f73">
+<meta name="theme-color" content="#F4F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1018" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="강릉여행">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>
-:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-body{margin:0;font:14px/1.5 system-ui,sans-serif}
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px)}
+body{margin:0}
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
 <title>강릉·대관령 가족여행</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: phone app shell — sticky header, day switcher, timeline + slot cards, fixed bottom tab bar */
+/* Layout: native-feeling phone app — large titles, segmented controls, one dark "focus" card, quiet list rows, fixed tab bar */
 :root {
-  --bg: #eaf0ef;
-  --surface: #ffffff;
-  --surface-2: #f3f7f6;
-  --ink: #16262b;
-  --muted: #5b6a6d;
-  --line: #d6e0df;
-  --sea: #1f5f73;
-  --pine: #4b6640;
-  --clay: #8f5523;
-  --hot: #9a3a30;
-  --wx: #3d6478;
-  --now: #c2410c;
-  --f-display: "Gowun Batang", "Nanum Myeongjo", serif;
-  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
-  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --ground: #F4F6F9;
+  --surface: #FFFFFF;
+  --ink: #0E1726;
+  --sub: #5B6576;
+  --faint: #8A93A3;
+  --line: #E4E8EE;
+  --divider: #EEF1F5;
+  --seg: #E9EDF2;
+  --accent: #1F6FE5;
+  --accent-soft: #EEF4FD;
+  --a: #1F6FE5;
+  --b: #17794E;
+  --b-soft: #E8F5EE;
+  --c: #C2570C;
+  --hot: #C22E46;
+  --hot-soft: #FDECEF;
+  --hot-ink: #8E1C2F;
+  --warn-soft: #FFF4E8;
+  --warn-ink: #8A3F06;
+  --focus-bg: #0E1726;
+  --focus-ink: #FFFFFF;
+  --focus-sub: #B8C2D3;
+  --font: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0e1618; --surface: #162125; --surface-2: #1c292d; --ink: #e2ebeb; --muted: #97a8aa;
-    --line: #29393d; --sea: #72b6ca; --pine: #9dc28a; --clay: #dba36f; --hot: #e48d80; --wx: #92b7cb; --now: #fb923c;
+    --ground: #0B1018; --surface: #151C27; --ink: #E8EDF4; --sub: #A3ADBD; --faint: #7D8797; --line: #243042; --divider: #1E2836; --seg: #1E2836;
+    --accent: #5B9BFF; --accent-soft: #1A2A44; --a: #5B9BFF; --b: #4CC38A; --b-soft: #14302A; --c: #F2994A; --hot: #FF6B81; --hot-soft: #3A1820; --hot-ink: #FFB3BF;
+    --warn-soft: #33230F; --warn-ink: #F7C58C; --focus-bg: #1A2A44; --focus-ink: #FFFFFF; --focus-sub: #A9BDE0;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0e1618; --surface: #162125; --surface-2: #1c292d; --ink: #e2ebeb; --muted: #97a8aa;
-  --line: #29393d; --sea: #72b6ca; --pine: #9dc28a; --clay: #dba36f; --hot: #e48d80; --wx: #92b7cb; --now: #fb923c;
+  --ground: #0B1018; --surface: #151C27; --ink: #E8EDF4; --sub: #A3ADBD; --faint: #7D8797; --line: #243042; --divider: #1E2836; --seg: #1E2836;
+  --accent: #5B9BFF; --accent-soft: #1A2A44; --a: #5B9BFF; --b: #4CC38A; --b-soft: #14302A; --c: #F2994A; --hot: #FF6B81; --hot-soft: #3A1820; --hot-ink: #FFB3BF;
+  --warn-soft: #33230F; --warn-ink: #F7C58C; --focus-bg: #1A2A44; --focus-ink: #FFFFFF; --focus-sub: #A9BDE0;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; -webkit-tap-highlight-color: transparent; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sea); }
+html, body { background: var(--ground); }
+body { color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5; font-variant-numeric: tabular-nums; -webkit-tap-highlight-color: transparent; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ground); }
 button { font: inherit; color: inherit; }
-a { color: var(--sea); }
-:focus-visible { outline: 2px solid var(--sea); outline-offset: 2px; border-radius: 6px; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
-.app { max-width: 560px; margin: 0 auto; min-height: 100%; }
-.gut { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-
-/* header */
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--sea); color: #fff; }
-.top-in { padding-block: 12px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.top h1 { margin: 0; font-family: var(--f-display); font-size: 19px; line-height: 1.25; letter-spacing: -0.01em; }
-.top .sub { font-size: 12px; opacity: .82; letter-spacing: .02em; }
-.dchip { flex: none; font-family: var(--f-mono); font-size: 13px; font-weight: 600; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); padding: 4px 10px; border-radius: 999px; }
-.dayseg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding-block: 0 12px; }
-.dayseg button { border: 0; background: rgba(255,255,255,.12); color: #fff; border-radius: 12px; padding: 7px 4px; cursor: pointer; line-height: 1.25; }
-.dayseg button b { display: block; font-family: var(--f-mono); font-size: 13px; letter-spacing: .04em; }
-.dayseg button span { font-size: 12px; opacity: .85; }
-.dayseg button[aria-selected="true"] { background: #fff; color: #1f5f73; }
-.dayseg button[aria-selected="true"] span { opacity: 1; }
-
-main { padding-block: 16px calc(84px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
+.app { max-width: 480px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 20px calc(96px + env(safe-area-inset-bottom, 0px)); }
+.view { display: flex; flex-direction: column; gap: 16px; }
 .view[hidden] { display: none !important; }
-.view { display: grid; gap: 14px; }
 
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; min-width: 0; }
-.eyebrow { font-size: 11.5px; letter-spacing: .08em; color: var(--muted); font-weight: 600; text-transform: uppercase; }
-h2 { font-family: var(--f-display); font-size: 21px; margin: 2px 0 6px; line-height: 1.3; text-wrap: balance; }
-h3 { font-size: 16.5px; margin: 0; line-height: 1.4; text-wrap: balance; }
-.muted { color: var(--muted); }
-.small { font-size: 13px; }
-.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.hdr { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.hdr .eb { font-size: 14px; font-weight: 600; color: var(--sub); }
+h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; }
+.lead { margin: 4px 0 0; font-size: 15px; color: var(--sub); }
+.wxpill { flex: none; display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 14px; font-weight: 600; }
+.wxpill svg { stroke: #E08A00; width: 16px; height: 16px; }
 
-/* day head */
-.wxline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.pill { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); }
-.pill.wx { color: var(--wx); border-color: color-mix(in srgb, var(--wx) 30%, var(--line)); background: color-mix(in srgb, var(--wx) 8%, var(--surface)); }
-.route { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 8px; font-weight: 500; }
-.route .arr { color: var(--muted); font-size: 12px; }
-.route .stop { background: var(--surface-2); border-radius: 8px; padding: 2px 8px; font-size: 13.5px; }
+.seg { display: grid; gap: 4px; background: var(--seg); border-radius: 14px; padding: 4px; }
+.seg button { border: 0; border-radius: 11px; background: transparent; padding: 9px 0; font-size: 15px; font-weight: 600; color: var(--sub); cursor: pointer; min-height: 40px; }
+.seg button[aria-selected="true"] { background: var(--surface); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(14,23,38,.08); }
+.seg.plan button[aria-selected="true"] { background: var(--pc); color: #fff; box-shadow: none; }
 
-/* overview timeline */
-.tl { list-style: none; margin: 8px 0 0; padding: 0; display: grid; }
-.tl li { display: grid; grid-template-columns: 88px 1fr; gap: 10px; padding: 9px 0; border-top: 1px dashed var(--line); cursor: pointer; }
-.tl li:first-child { border-top: 0; }
-.tl li.nolink { cursor: default; }
-.tl .t { font-family: var(--f-mono); font-size: 12.5px; color: var(--sea); padding-top: 2px; font-variant-numeric: tabular-nums; }
-.tl .ti { font-weight: 600; font-size: 14.5px; line-height: 1.45; }
-.tl .w { font-size: 12.5px; color: var(--wx); }
-.alt { display: inline-block; margin-top: 4px; font-size: 12px; line-height: 1.45; color: var(--pine); background: color-mix(in srgb, var(--pine) 11%, var(--surface)); border: 1px solid color-mix(in srgb, var(--pine) 30%, var(--line)); border-radius: 8px; padding: 2px 8px; }
-.tl li.is-now .t, .tl li.is-now .ti { color: var(--now); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; }
+.pad { padding: 18px; }
+.list { padding: 0 16px; }
+.row { display: flex; align-items: center; gap: 12px; padding: 12px 0; min-height: 48px; border-top: 1px solid var(--divider); }
+.row:first-child { border-top: 0; }
+.grp-t { font-size: 14px; font-weight: 700; color: var(--sub); padding-left: 4px; margin-bottom: -8px; }
 
-/* slot */
-.slot { scroll-margin-top: 140px; padding: 0; overflow: hidden; }
-.slot.is-now { border-color: var(--now); box-shadow: 0 0 0 1px var(--now); }
-.slot-h { padding: 14px 16px 10px; display: grid; gap: 4px; }
-.slot-time { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 13px; color: var(--sea); font-weight: 600; font-variant-numeric: tabular-nums; }
-.nowtag { font-family: var(--f-body); font-size: 11px; font-weight: 700; color: #fff; background: var(--now); padding: 1px 7px; border-radius: 999px; letter-spacing: .04em; }
-.move { margin: 0 16px; padding: 7px 10px; border-radius: 10px; background: var(--surface-2); font-size: 12.5px; color: var(--muted); display: flex; gap: 6px; }
-.move b { color: var(--ink); font-weight: 600; }
-.ptabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 16px 0; }
-.ptab { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 4px; cursor: pointer; font-size: 13px; line-height: 1.2; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.ptab .k { font-family: var(--f-mono); font-weight: 600; }
-.ptab[aria-selected="true"] { background: var(--pc); border-color: var(--pc); color: var(--surface); }
-.pbody { margin: 8px 16px 0; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--pc) 9%, var(--surface)); border: 1px solid color-mix(in srgb, var(--pc) 25%, var(--line)); }
-.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.items li { position: relative; padding-left: 12px; font-size: 14.5px; line-height: 1.6; overflow-wrap: anywhere; }
-.items li::before { content: ""; position: absolute; left: 0; top: .72em; width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .45; }
-.items b { font-weight: 600; }
-.pbody .items b { color: var(--pc); }
-.hot { margin: 8px 16px 0; padding: 10px 12px; border-radius: 12px; border: 1px dashed color-mix(in srgb, var(--hot) 45%, var(--line)); }
-.hot .lbl { font-size: 12.5px; font-weight: 700; color: var(--hot); margin-bottom: 4px; }
-.hot .items b { color: var(--hot); }
-.wxbox { margin: 8px 16px 0; font-size: 13px; color: var(--wx); display: flex; gap: 6px; }
-details.more { margin: 10px 0 0; border-top: 1px solid var(--line); }
-details.more summary { list-style: none; cursor: pointer; padding: 11px 16px; font-size: 13.5px; font-weight: 600; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
-details.more summary::-webkit-details-marker { display: none; }
-details.more summary::after { content: "펼치기"; font-size: 12px; font-weight: 500; }
-details.more[open] summary::after { content: "접기"; }
-.info { padding: 0 16px 14px; display: grid; gap: 12px; }
-.info section { display: grid; gap: 4px; min-width: 0; }
-.info h4 { margin: 0; font-size: 12px; letter-spacing: .06em; color: var(--ic); font-weight: 700; }
-.info .items li { font-size: 13.5px; }
-.maplink, .copy { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 0 7px; margin-left: 4px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface-2); color: var(--sea); text-decoration: none; line-height: 1.7; vertical-align: 1px; cursor: pointer; }
-.tel { font-family: var(--f-mono); font-size: .94em; color: var(--sea); text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
+/* focus card */
+.focus { display: flex; flex-direction: column; gap: 12px; background: var(--focus-bg); color: var(--focus-ink); border-radius: 22px; padding: 18px 18px 16px; text-decoration: none; cursor: pointer; border: 0; text-align: left; width: 100%; }
+.focus .top { display: flex; align-items: center; gap: 8px; }
+.tag { background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 9px; }
+.focus .when { font-size: 14px; font-weight: 600; color: var(--focus-sub); }
+.focus .ttl { font-size: 21px; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; }
+.focus .pl { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--focus-sub); }
+.chip { flex: none; width: 22px; height: 22px; border-radius: 7px; color: #fff; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+.acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; }
+.act { display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); font-size: 15px; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; }
+.focus .act { background: rgba(255,255,255,.12); color: #fff; font-weight: 600; }
 
-/* quick */
-.qrow { display: grid; grid-template-columns: 62px 1fr; gap: 10px; padding: 8px 0; border-top: 1px dashed var(--line); font-size: 14px; }
-.qrow:first-of-type { border-top: 0; }
-.qk { font-size: 12px; font-weight: 700; color: var(--qc); padding-top: 2px; }
-.rule { margin-top: 8px; font-size: 13px; padding: 8px 10px; border-radius: 10px; background: var(--surface-2); }
-.rule b { color: var(--clay); }
+.next { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); width: 100%; text-align: left; cursor: pointer; }
+.next .tx { flex: 1; min-width: 0; font-size: 15px; }
+.next svg { color: var(--faint); }
+
+details.route summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; font-weight: 700; font-size: 15px; }
+details.route summary::-webkit-details-marker { display: none; }
+details.route summary .r { font-weight: 500; color: var(--sub); font-size: 14px; display: flex; align-items: center; gap: 4px; }
+details.route[open] summary .chev { transform: rotate(180deg); }
+details.route .body { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+.stops { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+.stops span { background: var(--ground); border-radius: 8px; padding: 2px 8px; font-size: 14px; font-weight: 500; }
+.stops i { font-style: normal; color: var(--faint); font-size: 12px; }
+.note { font-size: 13px; color: var(--sub); }
+
+/* timeline */
+.tl .row { align-items: flex-start; cursor: pointer; }
+.tl .row.static { cursor: default; }
+.tl .t { width: 52px; flex: none; font-size: 15px; font-weight: 700; padding-top: 1px; }
+.tl .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 7px; background: var(--surface); border: 2px solid #C9CFD8; }
+.tl .row.now .dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.tl .row.done .dot { background: #C9CFD8; }
+.tl .tt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.tl .tt b { font-size: 16px; font-weight: 500; line-height: 1.4; }
+.tl .row.now { color: var(--accent); }
+.tl .row.now .tt b { font-weight: 700; }
+.tl .row.done { color: var(--faint); }
+.tl .row.done .tt b { text-decoration: line-through; }
+.tl .row svg.go { color: var(--faint); margin-top: 3px; }
+.alt { align-self: flex-start; font-size: 13px; font-weight: 600; color: var(--b); background: var(--b-soft); border-radius: 6px; padding: 2px 7px; line-height: 1.45; }
+
+/* detail */
+.dtop { display: flex; align-items: center; justify-content: space-between; margin: -10px -8px 0; }
+.back { width: 44px; height: 44px; border: 0; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.back svg { width: 24px; height: 24px; stroke-width: 2.2; }
+.dtop .w { font-size: 15px; font-weight: 600; color: var(--sub); }
+.dtitle { font-size: 25px; font-weight: 800; line-height: 1.35; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.move { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: var(--sub); margin-top: -6px; }
+.move svg { margin-top: 2px; width: 16px; height: 16px; }
+.pcard { display: flex; flex-direction: column; gap: 12px; }
+.pcard .rank { font-size: 13px; font-weight: 700; color: var(--pc); }
+.pcard .nm { font-size: 20px; font-weight: 700; line-height: 1.35; }
+.pcard .ad { font-size: 14px; color: var(--sub); }
+ul.bul { margin: 0; padding: 0 0 0 18px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.6; }
+ul.bul li { overflow-wrap: anywhere; }
+ul.bul b { font-weight: 700; }
+.hot-h { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 4px; }
+.hot-h b { font-size: 15px; color: var(--hot); }
+.hot-h span { font-size: 13px; color: var(--sub); font-weight: 600; }
+.hotrow { text-decoration: none; color: inherit; }
+.hotrow .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hotrow .tx b { font-size: 16px; font-weight: 600; }
+.hotrow .tx span { font-size: 14px; color: var(--sub); line-height: 1.45; }
+.hotrow svg { color: var(--accent); }
+details.inf { border-top: 1px solid var(--divider); }
+details.inf:first-child { border-top: 0; }
+details.inf summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 12px 0; min-height: 48px; }
+details.inf summary::-webkit-details-marker { display: none; }
+details.inf summary .k { width: 64px; flex: none; font-size: 14px; font-weight: 700; color: var(--sub); }
+details.inf summary .v { flex: 1; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+details.inf summary svg { color: var(--faint); width: 16px; height: 16px; transition: transform .2s; }
+details.inf[open] summary .v { white-space: normal; color: var(--sub); font-size: 0; }
+details.inf[open] summary svg { transform: rotate(180deg); }
+details.inf .body { padding: 0 0 14px; }
+details.inf ul.bul { font-size: 15px; }
+.tel { color: var(--accent); white-space: nowrap; text-decoration: underline; text-underline-offset: 2px; }
+.mini { display: inline-flex; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 7px; padding: 1px 8px; margin-left: 4px; text-decoration: none; cursor: pointer; vertical-align: 1px; line-height: 1.7; }
+
+/* switch */
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--sub); }
+.legend i { width: 10px; height: 10px; border-radius: 3px; }
+.sw { display: flex; flex-direction: column; gap: 10px; }
+.sw .h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.sw .h b { font-size: 18px; }
+.sw .h span { font-size: 14px; font-weight: 600; color: var(--sub); }
+.rule { background: var(--warn-soft); color: var(--warn-ink); border-radius: 12px; padding: 10px 12px; font-size: 15px; line-height: 1.5; }
+.opt { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 16px; line-height: 1.45; }
+.opt .chip { width: 28px; height: 28px; border-radius: 8px; font-size: 14px; }
 
 /* prep */
-.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.seg button { border: 0; background: transparent; padding: 8px; border-radius: 9px; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--muted); }
-.seg button[aria-selected="true"] { background: var(--sea); color: var(--surface); }
-.prog { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-.bar { flex: 1; height: 8px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
-.bar i { display: block; height: 100%; background: var(--pine); transition: width .25s; }
-.chk { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 12px 0; border-top: 1px solid var(--line); align-items: start; }
-.chk:first-child { border-top: 0; }
-.chk input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--pine); }
-.chk .ttl { font-weight: 600; font-size: 15px; }
-.chk.done .ttl { text-decoration: line-through; color: var(--muted); }
-.chk .meta { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 6px; }
-.chk .note { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.ring { flex: none; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.ring div { width: 50px; height: 50px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+.chk { align-items: flex-start; }
+.chk input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--b); flex: none; cursor: pointer; }
+.chk .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
+.chk .tx b { font-size: 16px; font-weight: 600; line-height: 1.4; }
+.chk .tx span { font-size: 14px; color: var(--sub); }
+.chk.done .tx b { color: var(--faint); text-decoration: line-through; }
+.chk .more { flex: none; border: 0; background: none; width: 36px; height: 36px; margin: -6px -8px 0 0; display: flex; align-items: center; justify-content: center; color: var(--faint); cursor: pointer; }
+.chk .more[aria-expanded="true"] svg { transform: rotate(180deg); }
+.chk .ex { margin-top: 6px; font-size: 14px; color: var(--ink); background: var(--ground); border-radius: 10px; padding: 8px 10px; }
+.chk .ex ul.bul { font-size: 14px; gap: 4px; }
 .star { color: var(--hot); }
-.pk { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px 10px; padding: 9px 0; border-top: 1px solid var(--line); align-items: start; font-size: 14.5px; }
-.pk:first-of-type { border-top: 0; }
-.pk input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--pine); }
-.pk.done .n { text-decoration: line-through; color: var(--muted); }
-.pk .m { font-size: 12.5px; color: var(--muted); }
-.pk .w { font-size: 11.5px; color: var(--sea); text-align: right; max-width: 110px; line-height: 1.4; padding-top: 3px; }
-.ghost { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 12px; font-size: 13px; cursor: pointer; color: var(--muted); justify-self: end; }
+.reset { align-self: center; border: 0; background: none; color: var(--sub); font-size: 14px; text-decoration: underline; cursor: pointer; padding: 8px; }
 
 /* info */
-.kv { display: grid; gap: 2px; padding: 8px 0; border-top: 1px dashed var(--line); }
-.kv:first-of-type { border-top: 0; }
-.kv .k { font-size: 12px; color: var(--muted); font-weight: 600; }
-.wxday { display: grid; gap: 4px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
-.wxday:first-of-type { border-top: 0; }
-.wxday .d { font-weight: 700; font-family: var(--f-mono); color: var(--wx); }
-.legend { display: grid; gap: 6px; font-size: 14px; }
-.legend span b { font-family: var(--f-mono); margin-right: 6px; }
-.alert { border-color: color-mix(in srgb, var(--hot) 40%, var(--line)); background: color-mix(in srgb, var(--hot) 6%, var(--surface)); }
-.alert h3 { color: var(--hot); }
-ol.src { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--muted); }
+.kgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; background: var(--ground); border-radius: 14px; padding: 12px; }
+.kgrid div { display: flex; flex-direction: column; }
+.kgrid span { font-size: 13px; color: var(--sub); }
+.kgrid b { font-size: 17px; }
+.er { display: flex; align-items: center; gap: 12px; background: var(--hot-soft); color: var(--hot-ink); border-radius: 20px; padding: 14px 16px; text-decoration: none; }
+.er .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--hot); color: #fff; display: flex; align-items: center; justify-content: center; flex: none; }
+.er .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.er b { font-size: 16px; }
+.er span { font-size: 14px; }
+.wx .d { width: 54px; flex: none; display: flex; flex-direction: column; }
+.wx .d b { font-size: 16px; }
+.wx .d span, .wx .m span { font-size: 13px; color: var(--sub); }
+.wx .m { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.wx .m b { font-size: 15px; font-weight: 600; }
+.wx .t { font-size: 16px; font-weight: 700; text-align: right; flex: none; }
+.wx .row { align-items: flex-start; }
+details.src summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--sub); font-size: 14px; }
+details.src ol { margin: 0; padding: 0 16px 16px 34px; font-size: 13px; color: var(--sub); }
 
 /* tab bar */
-.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
-.tabbar-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
-.tabbar button { border: 0; background: none; padding: 8px 0 9px; cursor: pointer; display: grid; justify-items: center; gap: 2px; font-size: 11.5px; color: var(--muted); font-weight: 600; }
-.tabbar svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.tabbar button[aria-selected="true"] { color: var(--sea); }
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line); padding-top: 8px; padding-bottom: max(10px, env(safe-area-inset-bottom, 0px)); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
+.tabbar .in { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tabbar button { border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--faint); font-size: 12px; font-weight: 600; min-height: 48px; cursor: pointer; }
+.tabbar button svg { width: 24px; height: 24px; }
+.tabbar button[aria-selected="true"] { color: var(--accent); font-weight: 700; }
 
-.toast { position: fixed; left: 50%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); font-size: 13px; padding: 7px 14px; border-radius: 999px; z-index: 9; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.toast { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--ground); font-size: 14px; padding: 8px 16px; border-radius: 999px; z-index: 9; opacity: 0; pointer-events: none; transition: opacity .2s; white-space: nowrap; }
 .toast.on { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
@@ -199,46 +238,32 @@ ol.src { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--mu
 
 
 <div class="app">
-  <header class="top">
-    <div class="gut">
-      <div class="top-in">
-        <div style="min-width:0">
-          <h1>강릉·대관령 가족여행</h1>
-          <div class="sub">10.22 목 – 10.24 토 · 2박 3일 · v3</div>
-        </div>
-        <div class="dchip" id="dchip">D-1</div>
-      </div>
-      <div class="dayseg" id="dayseg" role="tablist" aria-label="일차 선택"></div>
-    </div>
-  </header>
-
-  <main class="gut" id="main">
-    <section class="view" id="v-plan"></section>
-    <section class="view" id="v-quick" hidden></section>
-    <section class="view" id="v-prep" hidden></section>
-    <section class="view" id="v-info" hidden></section>
-  </main>
+  <section class="view" id="v-plan"></section>
+  <section class="view" id="v-detail" hidden></section>
+  <section class="view" id="v-switch" hidden></section>
+  <section class="view" id="v-prep" hidden></section>
+  <section class="view" id="v-info" hidden></section>
 </div>
 
 <nav class="tabbar" aria-label="메뉴">
-  <div class="tabbar-in" role="tablist">
-    <button data-tab="plan" aria-selected="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>일정</button>
-    <button data-tab="quick" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M7 4v16M17 4v16M4 8h6M14 15h6"/></svg>플랜 전환</button>
-    <button data-tab="prep" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/><path d="M4 20h16" opacity=".5"/></svg>준비</button>
-    <button data-tab="info" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg>정보</button>
+  <div class="in" role="tablist">
+    <button type="button" data-tab="plan" aria-selected="true"><svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>일정</button>
+    <button type="button" data-tab="switch" aria-selected="false"><svg class="i" viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>플랜 전환</button>
+    <button type="button" data-tab="prep" aria-selected="false"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>준비</button>
+    <button type="button" data-tab="info" aria-selected="false"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5L12 4l9 6.5V20H3z"/><path d="M9.5 20v-5h5v5"/></svg>숙소·정보</button>
   </div>
 </nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 const PL = [
-  { k: 'A', tag: '추천', c: 'var(--sea)' },
-  { k: 'B', tag: '여유', c: 'var(--pine)' },
-  { k: 'C', tag: '대안', c: 'var(--clay)' }
+  { k: 'A', tag: '추천', c: 'var(--a)' },
+  { k: 'B', tag: '여유', c: 'var(--b)' },
+  { k: 'C', tag: '대안', c: 'var(--c)' }
 ];
-const IK = [['날씨', 'var(--wx)'], ['위치·연락처', 'var(--muted)'], ['시간·요금', 'var(--muted)'], ['주차·동선', 'var(--muted)'], ['아이', 'var(--sea)'], ['어머님', 'var(--clay)']];
+const IK = ['날씨', '위치', '시간·요금', '주차·동선', '하린이', '어머님'];
+const QK = [['A', 'var(--a)'], ['B', 'var(--b)'], ['C', 'var(--c)'], ['★', 'var(--hot)']];
 const S = (time, title, plans, star, info, aTag) => ({ time, title, plans, star, info, aTag });
-
 const WEATHER = [
   ['10/22 (목)', '아침 4~7℃ / 낮 14~16℃', '아침 -3~-1℃ / 낮 11~13℃', '맑음. 동해안 강풍특보 가능, 너울', '바비큐 실내 전환, 해안도로 드라이브 제외, 출발 전 성에 제거'],
   ['10/23 (금)', '전국 아침 3~15℃ / 낮 18~22℃', '아침까지 평년보다 2~6℃ 낮음', '가끔 구름, 동해 파고 0.5~1.5m', '3일 중 최적 → 해변·카페 유지, 숙소 앞 압축 동선 추가'],
@@ -442,7 +467,6 @@ const QUICK = [
 ['3일차 점심', '10/24 (토) 11:30', ['스위스램 양갈비 (11:30 예약)', '대관령한우타운 1등급 한우', '황태회관', '납작식당 오삼불고기 · 부산식육식당 숙성 등심'], '양갈비 예약 마감, 어머님이 양고기를 낯설어하실 때'],
 ['3일차 목장', '10/24 (토) 12:50', ['하늘목장 트랙터마차 + 건초주기', '마차 왕복 + 하단 목장카페 휴식', '발왕산 케이블카 / 실내 아기동물농장', '—'], '09시 운행 확인, 정상부 강풍·추위가 심할 때']
 ];
-const QK = [['A 기본', 'var(--sea)'], ['B 휴식', 'var(--pine)'], ['C 우회', 'var(--clay)'], ['★ 핫플', 'var(--hot)']];
 
 const CHECK = [
 ['대관령 스위스램 예약', '사전 예약', '출발 전 필수', '10/24(토) 11:30 성인 + 아기 1명(유아의자) · 하린이 몫 무염 생고기 별도 제공 가능 여부', '0507-1328-9272 (화 휴무)', '남편/아내'],
@@ -540,17 +564,69 @@ const MOVES = {
 ['하늘목장 → 대관령IC → 양주', '약 3시간 30분~4시간 (휴게소 1회 포함)']] }
 };
 
+
+
+/* ---------- icons ---------- */
+const IC = {
+  pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+  phone: '<svg class="i" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
+  copy: '<svg class="i" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>',
+  car: '<svg class="i" viewBox="0 0 24 24"><path d="M5 17h14M6 17l1.5-6h9L18 17M8 17v2M16 17v2"/></svg>',
+  right: '<svg class="i go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
+  down: '<svg class="i chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>',
+  back: '<svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
+  sun: '<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  plus: '<svg class="i" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="M12 6v12M6 12h12"/></svg>'
+};
+
 /* ---------- helpers ---------- */
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const split = s => s.split(' · ').map(x => { const m = x.match(/^\[([^\]]+)\]\s*(.*)$/); return m ? { h: m[1], t: m[2] } : { h: '', t: x }; });
 const PHONE = /(0\d{1,3}-\d{3,4}-\d{4})/g;
-const fmt = s => esc(s).replace(PHONE, p => `<a class="tel" href="tel:${p.replace(/-/g, '')}">${p}</a><button class="copy" data-copy="${p}" type="button">복사</button>`);
-const mapUrl = (name, region) => 'https://map.naver.com/p/search/' + encodeURIComponent((/휴게소|IC/.test(name) ? '' : region + ' ') + name.replace(/\(.*?\)/g, '').replace(/^(1|2|3)순위:\s*/, '').trim());
-function itemsHtml(list, opt = {}) {
-  return '<ul class="items">' + list.map(it => {
-    const map = opt.map && it.h && !/응급|핵심|절대|최우선|낮잠|방한|스위스램 주문/.test(it.h) ? `<a class="maplink" href="${mapUrl(it.h, opt.region)}" target="_blank" rel="noopener">지도</a>` : '';
-    return `<li>${it.h ? `<b>${esc(it.h)}</b> ` : ''}${fmt(it.t)}${map}</li>`;
-  }).join('') + '</ul>';
+const fmt = s => esc(s).replace(PHONE, p => `<a class="tel" href="tel:${p.replace(/-/g, '')}">${p}</a>`);
+const norm = s => s.replace(/\(.*?\)/g, '').replace(/\s+/g, '');
+const cleanName = h => h.replace(/^\d순위:\s*/, '').replace(/\s*\d{1,2}:\d{2}.*$/, '').trim();
+const NOT_PLACE = /(시 |플랜|보호|원칙|순서|최우선|낮잠|방한|멘트|응급|물놀이|해변\]|목적지)/;
+const isPlace = h => h && !NOT_PLACE.test(h) && cleanName(h).length <= 16;
+const regionOf = di => di === 2 ? '평창' : '강릉';
+const mapUrl = (name, di) => 'https://map.naver.com/p/search/' + encodeURIComponent((/휴게소|IC|평창|강릉|주문진|대관령/.test(name) ? '' : regionOf(di) + ' ') + name.replace(/\(.*?\)/g, '').trim());
+const mapBtn = (name, di) => `<a class="mini" href="${mapUrl(name, di)}" target="_blank" rel="noopener">${IC.pin.replace('class="i"', 'class="i" style="width:12px;height:12px"')}지도</a>`;
+const startOf = t => (t.match(/\d{1,2}:\d{2}/) || [''])[0];
+const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+const shortTitle = t => t.split(' (')[0];
+
+function bullets(items, di, withMap) {
+  return '<ul class="bul">' + items.map(it => `<li>${it.h ? `<b>${esc(it.h)}</b> ` : ''}${fmt(it.t)}${withMap && isPlace(it.h) ? mapBtn(cleanName(it.h), di) : ''}</li>`).join('') + '</ul>';
+}
+function findIn(text, name) {
+  const n = norm(name);
+  return split(text).find(e => e.h && (n.includes(norm(e.h)) || norm(e.h).includes(n))) || null;
+}
+function placeOf(slot, pi) {
+  const text = slot.plans[pi];
+  const first = split(text)[0];
+  let rank = '', name = '';
+  if (first.h) {
+    rank = (first.h.match(/^(\d순위)/) || [])[1] || '';
+    const parts = first.h.replace(/^\d순위:\s*/, '').split(' 또는 ');
+    const hit = parts.find(x => isPlace(x));
+    if (hit) name = cleanName(hit);
+  }
+  const fromHead = !!name;
+  if (!name) {
+    const fb = split(slot.info[1]).find(e => e.h && isPlace(e.h));
+    if (fb) {
+      const n = norm(fb.h.replace(/^강릉\s*/, ''));
+      const hay = norm((pi === 0 ? slot.title : '') + text);
+      if (hay.includes(n) || text.includes('[' + fb.h.split(' ').pop() + ']')) { name = cleanName(fb.h); rank = ''; }
+    }
+  }
+  if (!name) return null;
+  const loc = findIn(slot.info[1], name);
+  const hrs = findIn(slot.info[2], name);
+  const phone = loc && (loc.t.match(PHONE) || [])[0];
+  const addr = loc ? loc.t.replace(/\s*\((0\d[\d-]+)\)/, '').trim() : '';
+  return { rank, name, phone, addr, hrs: hrs ? hrs.t : '', fromHead };
 }
 
 const store = {
@@ -560,215 +636,256 @@ const store = {
 
 /* ---------- time (KST) ---------- */
 function kstNow() { const d = new Date(Date.now() + 9 * 3600e3); return { ymd: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes() }; }
-const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
-function slotRanges(day) {
+const now = kstNow();
+const todayIdx = DAYS.findIndex(d => d.ymd === now.ymd);
+const tripDiff = Math.round((Date.parse(now.ymd) - Date.parse('2026-10-22')) / 864e5);
+function ranges(day) {
   return day.slots.map((s, j) => {
-    const ts = s.time.match(/\d{1,2}:\d{2}/g) || [];
-    const start = toMin(ts[0]);
+    const start = toMin(startOf(s.time));
     const next = day.slots[j + 1];
-    let end = next ? toMin(next.time.match(/\d{1,2}:\d{2}/)[0]) : (/사이/.test(s.time) ? 21 * 60 : toMin(ts[1] || ts[0]));
-    if (!next && /사이/.test(s.time)) end = 21 * 60;
+    const ts = s.time.match(/\d{1,2}:\d{2}/g);
+    const end = next ? toMin(startOf(next.time)) : (/사이/.test(s.time) ? 21 * 60 : toMin(ts[1] || ts[0]));
     return [start, end];
   });
 }
 
 /* ---------- state ---------- */
-const now = kstNow();
-const todayIdx = DAYS.findIndex(d => d.ymd === now.ymd);
 const state = {
   tab: store.get('tab', 'plan'),
   day: todayIdx >= 0 ? todayIdx : store.get('day', 0),
   plan: store.get('plan', {}),
   checks: store.get('checks', {}),
-  prepSeg: store.get('prepSeg', 'check')
+  prepSeg: store.get('prepSeg', 'check'),
+  open: {},
+  slot: null
 };
+const planOf = (di, j) => state.plan[di + '-' + j] ?? 0;
 
-function dChip() {
-  const start = Date.UTC(2026, 9, 22), t = Date.UTC(...now.ymd.split('-').map((v, i) => i === 1 ? v - 1 : +v));
-  const diff = Math.round((t - start) / 864e5);
-  if (diff < 0) return diff === -1 ? '내일 출발' : 'D' + diff;
-  if (diff <= 2) return `여행 ${diff + 1}일차`;
-  return '여행 완료';
-}
-
-/* ---------- render: days ---------- */
-function renderDaySeg() {
-  document.getElementById('dayseg').innerHTML = DAYS.map((d, i) =>
-    `<button role="tab" type="button" data-day="${i}" aria-selected="${i === state.day}"><b>${d.label}</b><span>${d.short}${i === todayIdx ? ' · 오늘' : ''}</span></button>`).join('');
-  document.getElementById('dayseg').hidden = state.tab !== 'plan';
-}
-
+/* ---------- 일정 ---------- */
 function renderPlan() {
-  const d = DAYS[state.day], mv = MOVES[d.label], w = WEATHER[state.day];
-  const ranges = slotRanges(d);
-  const isToday = state.day === todayIdx;
-  const nowSlot = isToday ? ranges.findIndex(([a, b]) => now.min >= a && now.min < b) : -1;
-  const slotStarts = d.slots.map(s => s.time.match(/\d{1,2}:\d{2}/)[0]);
+  const di = state.day, d = DAYS[di], mv = MOVES[d.label], w = WEATHER[di];
+  const R = ranges(d);
+  const isToday = di === todayIdx;
+  let focus = 0, label = '첫 일정';
+  if (isToday) {
+    const n = R.findIndex(([a, b]) => now.min >= a && now.min < b);
+    if (n >= 0) { focus = n; label = '지금'; }
+    else if (now.min < R[0][0]) { focus = 0; label = '곧 시작'; }
+    else { focus = -1; }
+  } else if (di === 0 && tripDiff === -1) label = '내일 첫 일정';
+  const status = t => { if (!isToday || !t) return ''; const m = toMin(t); const j = R.findIndex(([a, b]) => m >= a && m < b); const [a, b] = j >= 0 ? R[j] : [m, m + 60]; return now.min >= b ? 'done' : now.min >= a ? 'now' : ''; };
 
-  let h = `<div class="card">
-    <div class="eyebrow">${d.label} · ${esc(d.date)}</div>
-    <h2>${['강릉으로 출발하는 날', '바다와 낮잠의 날', '대관령 거쳐 집으로'][state.day]}</h2>
-    <p class="small" style="margin:0">${esc(d.intro)}</p>
-    <div class="wxline">
-      <span class="pill wx">강릉 ${esc(w[1])}</span>
-      <span class="pill wx">대관령 ${esc(w[2])}</span>
-      <span class="pill">${esc(w[3])}</span>
-    </div>
-  </div>
-  <div class="card">
-    <div class="eyebrow">동선</div>
-    <div class="route">${mv.route.split(' → ').map(s => `<span class="stop">${esc(s)}</span>`).join('<span class="arr">→</span>')}</div>
-    <p class="small muted" style="margin:8px 0 0">${esc(mv.drive)} · 이동 시간은 평시 기준 추정치라 당일 내비로 다시 확인하세요.</p>
-  </div>
-  <div class="card">
-    <div class="eyebrow">하루 한눈에</div>
-    <ol class="tl">${d.overview.map(([t, title, wx, alt]) => {
-      const first = (t.match(/\d{1,2}:\d{2}/) || [''])[0];
-      const j = slotStarts.indexOf(first);
-      const cls = [j < 0 ? 'nolink' : '', j >= 0 && j === nowSlot ? 'is-now' : ''].join(' ');
-      return `<li class="${cls}" ${j >= 0 ? `data-goto="${j}" tabindex="0" role="button"` : ''}>
-        <div class="t">${esc(t)}</div>
-        <div style="min-width:0"><div class="ti">${esc(title)}</div><div class="w">${esc(wx)}</div>${alt ? `<span class="alt">플랜별 시간 · ${esc(alt)}</span>` : ''}</div>
-      </li>`; }).join('')}</ol>
-  </div>`;
+  const temp = (w[1].match(/낮 ([\d~]+)℃/) || [])[1];
+  const eyebrow = `${d.date}${isToday ? ` · 여행 ${di + 1}일차` : (di === 0 && tripDiff === -1 ? ' · 내일 출발' : '')}`;
+  let h = `<div class="hdr"><div style="min-width:0"><div class="eb">${esc(eyebrow)}</div><h1>${isToday ? '오늘 일정' : `${di + 1}일차 일정`}</h1></div>
+    ${temp ? `<div class="wxpill">${IC.sun}낮 ${esc(temp)}°</div>` : ''}</div>
+    <div class="seg" role="tablist" style="grid-template-columns:repeat(3,minmax(0,1fr))">${DAYS.map((x, i) => `<button type="button" role="tab" data-day="${i}" aria-selected="${i === di}">${i + 1}일차 · ${x.short.slice(-1)}${i === todayIdx ? ' ·오늘' : ''}</button>`).join('')}</div>`;
 
-  const region = state.day === 2 ? '평창 대관령' : '강릉';
-  d.slots.forEach((s, j) => {
-    const key = state.day + '-' + j;
-    const pi = state.plan[key] ?? 0;
-    const p = PL[pi];
-    const leg = mv.legs[j] || ['', ''];
-    const stars = s.star ? (Array.isArray(s.star[0]) ? s.star : [s.star]) : [];
-    h += `<article class="card slot ${j === nowSlot ? 'is-now' : ''}" id="slot-${j}">
-      <div class="slot-h">
-        <div class="slot-time">${esc(s.time)}${j === nowSlot ? '<span class="nowtag">지금</span>' : ''}</div>
-        <h3>${esc(s.title)}</h3>
-      </div>
-      ${leg[0] ? `<div class="move"><span aria-hidden="true">🚗</span><span><b>${esc(leg[0])}</b> · ${esc(leg[1])}</span></div>` : ''}
-      <div class="ptabs" role="tablist">${PL.map((q, i) => `<button type="button" class="ptab" role="tab" data-key="${key}" data-p="${i}" aria-selected="${i === pi}" style="--pc:${q.c}"><span class="k">${q.k}</span>${esc(i === 0 && s.aTag ? s.aTag : q.tag)}</button>`).join('')}</div>
-      <div class="pbody" style="--pc:${p.c}">${itemsHtml(split(s.plans[pi]))}</div>
-      ${stars.map(([label, t]) => `<div class="hot"><div class="lbl">${esc(label)}</div>${itemsHtml(split(t))}</div>`).join('')}
-      <div class="wxbox"><span aria-hidden="true">☁︎</span><span>${esc(s.info[0])}</span></div>
-      <details class="more"><summary>위치·시간·주차·아이·어머님</summary>
-        <div class="info">${s.info.slice(1).map((t, i) => `<section style="--ic:${IK[i + 1][1]}"><h4>${IK[i + 1][0]}</h4>${itemsHtml(split(t), { map: i === 0, region })}</section>`).join('')}</div>
-      </details>
-    </article>`;
-  });
+  if (focus >= 0) {
+    const s = d.slots[focus], pi = planOf(di, focus), p = placeOf(s, pi);
+    const firstT = split(s.plans[pi])[0].t; const sub = p ? p.name : (firstT.length > 34 ? firstT.slice(0, 33) + '…' : firstT);
+    h += `<div class="focus" role="button" tabindex="0" data-open="${focus}">
+      <div class="top"><span class="tag">${label}</span><span class="when">${esc(s.time.replace(' ~ ', ' – '))}</span></div>
+      <div class="ttl">${esc(shortTitle(s.title))}</div>
+      <div class="pl"><span class="chip" style="background:${PL[pi].c}">${PL[pi].k}</span><span>${esc(sub)}</span></div>
+      ${p ? `<div class="acts"><a class="act" href="${mapUrl(p.name, di)}" target="_blank" rel="noopener">${IC.pin}지도</a>${p.phone ? `<a class="act" href="tel:${p.phone.replace(/-/g, '')}">${IC.phone}전화</a>` : ''}</div>` : ''}
+    </div>`;
+    const nx = d.slots[focus + 1];
+    if (nx) {
+      const lg = mv.legs[focus + 1] || ['', '']; const leg = /→/.test(lg[0]) ? lg[1].split(' · ')[0] : '';
+      h += `<button type="button" class="next" data-open="${focus + 1}">${IC.car}<span class="tx"><b>다음 ${esc(startOf(nx.time))}</b> ${esc(shortTitle(nx.title))}${leg ? ` · ${esc(leg)}` : ''}</span>${IC.right}</button>`;
+    }
+  } else {
+    h += `<div class="card pad"><b>오늘 일정을 모두 마쳤어요.</b><p class="lead">편히 쉬세요. 내일 일정은 위에서 다음 날을 눌러 보세요.</p></div>`;
+  }
+
+  h += `<details class="card route"${state.open.route ? ' open' : ''} data-key="route"><summary>오늘의 동선<span class="r">${esc(mv.drive.split(' (')[0].replace('하루 ', ''))}${IC.down}</span></summary>
+    <div class="body"><div class="stops">${mv.route.split(' → ').map(x => `<span>${esc(x)}</span>`).join('<i>→</i>')}</div>
+    <div>${esc(d.intro)}</div>
+    <div class="note">날씨: 강릉 ${esc(w[1])} · 대관령 ${esc(w[2])} · ${esc(w[3])}</div>
+    <div class="note">이동 시간은 평시 기준 추정치예요. 당일 내비로 다시 확인하세요.</div></div></details>`;
+
+  const starts = d.slots.map(s => startOf(s.time));
+  h += `<div class="card list tl">${d.overview.map(([t, title, wx, alt]) => {
+    const st = startOf(t), j = starts.indexOf(st), cls = status(st);
+    return `<div class="row ${cls} ${j < 0 ? 'static' : ''}" ${j >= 0 ? `data-open="${j}" role="button" tabindex="0"` : ''}>
+      <div class="t">${esc(st || t)}</div><div class="dot"></div>
+      <div class="tt"><b>${esc(title)}</b>${alt ? `<span class="alt">${esc(alt)}</span>` : ''}</div>${j >= 0 ? IC.right : ''}</div>`;
+  }).join('')}</div>`;
   document.getElementById('v-plan').innerHTML = h;
 }
 
-/* ---------- render: quick ---------- */
-function renderQuick() {
-  document.getElementById('v-quick').innerHTML = `<div class="card">
-      <div class="eyebrow">현장 전환표</div>
-      <h2>상황 바뀌면 여기서 고르기</h2>
-      <p class="small muted" style="margin:0">바꿔야 할 핵심 일정만 골라 A·B·C 플랜과 ★핫플 대안을 한 화면에 모았습니다.</p>
-    </div>` + QUICK.map(([title, when, rows, rule]) => `<div class="card">
-      <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>${esc(title)}</h3><span class="mono small muted">${esc(when)}</span></div>
-      <div style="margin-top:6px">${rows.map((t, i) => t === '—' ? '' : `<div class="qrow"><div class="qk" style="--qc:${QK[i][1]}">${QK[i][0]}</div><div style="min-width:0">${esc(t)}</div></div>`).join('')}</div>
-      <div class="rule"><b>전환 기준</b> ${esc(rule)}</div>
+/* ---------- 상세 ---------- */
+function renderDetail() {
+  const di = state.day, j = state.slot, d = DAYS[di], s = d.slots[j], pi = planOf(di, j), pc = PL[pi].c;
+  const leg = MOVES[d.label].legs[j] || ['', ''];
+  const items = split(s.plans[pi]);
+  const p = placeOf(s, pi);
+  let h = `<div class="dtop"><button type="button" class="back" data-back aria-label="일정으로 돌아가기">${IC.back}</button><div class="w">${di + 1}일차 · ${esc(s.time.replace(' ~ ', ' – '))}</div><div style="width:44px"></div></div>
+    <h1 class="dtitle">${esc(s.title)}</h1>
+    ${leg[0] && leg[0] !== '숙소 내' ? `<div class="move">${IC.car}<span>${esc(leg[0])} · ${esc(leg[1])}</span></div>` : ''}
+    <div class="seg plan" role="tablist" style="grid-template-columns:repeat(3,minmax(0,1fr));--pc:${pc}">${PL.map((q, i) => `<button type="button" role="tab" data-p="${i}" aria-selected="${i === pi}">${q.k} ${esc(i === 0 && s.aTag ? s.aTag : q.tag)}</button>`).join('')}</div>
+    <div class="card pad pcard" style="--pc:${pc}">`;
+  if (p) {
+    h += `<div>${p.rank ? `<div class="rank">${esc(p.rank)}</div>` : ''}<div class="nm">${esc(p.name)}</div>${p.addr || p.hrs ? `<div class="ad">${esc([p.addr, p.hrs].filter(Boolean).join(' · '))}</div>` : ''}</div>`;
+    const rest = p.fromHead ? [{ h: '', t: items[0].t }, ...items.slice(1)].filter(x => x.t) : items;
+    h += bullets(rest, di, true);
+    h += `<div class="acts"><a class="act" href="${mapUrl(p.name, di)}" target="_blank" rel="noopener">${IC.pin}지도</a>${p.phone ? `<a class="act" href="tel:${p.phone.replace(/-/g, '')}">${IC.phone}전화</a>` : ''}${p.addr || p.phone ? `<button type="button" class="act" data-copy="${esc(p.addr || p.phone)}">${IC.copy}${p.addr ? '주소' : '번호'}</button>` : ''}</div>`;
+  } else {
+    h += bullets(items, di, true);
+  }
+  h += `</div>`;
+
+  const stars = s.star ? (Array.isArray(s.star[0]) ? s.star : [s.star]) : [];
+  stars.forEach(([label, t]) => {
+    const list = split(t);
+    h += `<div class="card list"><div class="hot-h"><b>${esc(label)}</b><span>${list.filter(x => x.h).length}곳</span></div>
+      ${list.map(x => x.h && isPlace(x.h)
+        ? `<a class="row hotrow" href="${mapUrl(cleanName(x.h), di)}" target="_blank" rel="noopener"><span class="tx"><b>${esc(x.h)}</b><span>${esc(x.t)}</span></span>${IC.pin}</a>`
+        : `<div class="row"><span class="tx" style="flex:1;font-size:14px;color:var(--sub)">${x.h ? `<b>${esc(x.h)}</b> ` : ''}${esc(x.t)}</span></div>`).join('')}</div>`;
+  });
+
+  h += `<div class="card list">${s.info.map((t, i) => {
+    const list = split(t);
+    const summary = list[0].h ? `${list[0].h} ${list[0].t}` : list[0].t;
+    return `<details class="inf"><summary><span class="k">${IK[i]}</span><span class="v">${esc(summary)}</span>${IC.down}</summary><div class="body">${bullets(list, di, i === 1)}</div></details>`;
+  }).join('')}</div>`;
+  document.getElementById('v-detail').innerHTML = h;
+}
+
+/* ---------- 플랜 전환 ---------- */
+function renderSwitch() {
+  document.getElementById('v-switch').innerHTML = `<div><h1>플랜 전환</h1><p class="lead">상황이 바뀌면 여기서 바로 고르세요.</p></div>
+    <div class="legend"><span><i style="background:var(--a)"></i>A 기본</span><span><i style="background:var(--b)"></i>B 휴식</span><span><i style="background:var(--c)"></i>C 우회</span><span><i style="background:var(--hot)"></i>★ 핫플</span></div>` +
+    QUICK.map(([title, when, rows, rule]) => `<div class="card pad sw">
+      <div class="h"><b>${esc(title)}</b><span>${esc(when)}</span></div>
+      <div class="rule"><b>이럴 때 바꾸기</b> · ${esc(rule)}</div>
+      ${rows.map((t, i) => t === '—' ? '' : `<div class="opt"><span class="chip" style="background:${QK[i][1]}">${QK[i][0]}</span><span style="flex:1;min-width:0">${esc(t)}</span></div>`).join('')}
     </div>`).join('');
 }
 
-/* ---------- render: prep ---------- */
+/* ---------- 준비 ---------- */
+function checkGroup(when) {
+  if (/1일차/.test(when)) return '1일차 당일';
+  if (/2일차/.test(when)) return '2일차 당일';
+  if (/3일차/.test(when)) return '3일차 당일';
+  if (/10\/21|전날/.test(when)) return '오늘 밤까지';
+  return '출발 전';
+}
 function renderPrep() {
-  const ck = state.checks;
-  const totalC = CHECK.length, doneC = CHECK.filter((_, i) => ck['c' + i]).length;
-  const packKeys = []; PACK.forEach((g, gi) => g[1].forEach((_, ii) => packKeys.push('p' + gi + '-' + ii)));
-  const doneP = packKeys.filter(k => ck[k]).length;
-  const seg = state.prepSeg;
-  let h = `<div class="seg" role="tablist">
-      <button type="button" data-seg="check" aria-selected="${seg === 'check'}">예약·확인 ${doneC}/${totalC}</button>
-      <button type="button" data-seg="pack" aria-selected="${seg === 'pack'}">준비물 ${doneP}/${packKeys.length}</button>
+  const ck = state.checks, seg = state.prepSeg;
+  const cKeys = CHECK.map((_, i) => 'c' + i);
+  const pKeys = []; PACK.forEach((g, gi) => g[1].forEach((_, ii) => pKeys.push('p' + gi + '-' + ii)));
+  const keys = seg === 'check' ? cKeys : pKeys;
+  const done = keys.filter(k => ck[k]).length, pct = Math.round(done / keys.length * 100);
+  const left = keys.length - done;
+  let h = `<h1>준비</h1>
+    <div class="card pad" style="display:flex;align-items:center;gap:16px">
+      <div class="ring" style="background:conic-gradient(var(--b) 0 ${pct}%, var(--seg) ${pct}% 100%)"><div>${done}/${keys.length}</div></div>
+      <div><div style="font-size:17px;font-weight:700">${left ? `${seg === 'check' ? '예약·확인' : '준비물'} ${left}개 남음` : '모두 끝났어요'}</div>
+      <div style="font-size:14px;color:var(--sub)">체크 표시는 이 폰에만 저장돼요</div></div>
+    </div>
+    <div class="seg" role="tablist" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+      <button type="button" role="tab" data-seg="check" aria-selected="${seg === 'check'}">예약·확인</button>
+      <button type="button" role="tab" data-seg="pack" aria-selected="${seg === 'pack'}">준비물</button>
     </div>`;
   if (seg === 'check') {
-    h += `<div class="card"><div class="prog"><div class="bar"><i style="width:${doneC / totalC * 100}%"></i></div><span class="mono">${doneC}/${totalC}</span></div>
-      <p class="small muted" style="margin:8px 0 0">★는 날씨·핫플 반영으로 새로 생긴 항목이에요. 체크 표시는 이 폰에만 저장돼요.</p></div>
-      <div class="card">${CHECK.map(([title, cat, when, txt, note, who], i) => {
-        const star = title.startsWith('★ ');
-        const on = !!ck['c' + i];
-        return `<label class="chk ${on ? 'done' : ''}"><input type="checkbox" id="c${i}" data-ck="c${i}" ${on ? 'checked' : ''}>
-          <div style="min-width:0"><div class="ttl">${star ? '<span class="star">★</span> ' : ''}${esc(star ? title.slice(2) : title)}</div>
-          <div class="meta"><span class="pill">${esc(cat)}</span><span class="pill wx">${esc(when)}</span><span class="pill">담당 · ${esc(who)}</span></div>
-          ${itemsHtml(split(txt))}<div class="note">${fmt(note)}</div></div></label>`; }).join('')}</div>`;
+    const order = ['오늘 밤까지', '출발 전', '1일차 당일', '2일차 당일', '3일차 당일'];
+    const groups = {};
+    CHECK.forEach((c, i) => { const g = checkGroup(c[2]); (groups[g] = groups[g] || []).push(i); });
+    order.filter(g => groups[g]).forEach(g => {
+      h += `<div class="grp-t">${g}</div><div class="card list">${groups[g].map(i => {
+        const [title, cat, when, txt, note, who] = CHECK[i], k = 'c' + i, on = !!ck[k], ex = !!state.open[k], star = title.startsWith('★ ');
+        return `<div class="row chk ${on ? 'done' : ''}"><input type="checkbox" id="${k}" data-ck="${k}" ${on ? 'checked' : ''}>
+          <label class="tx" for="${k}"><b>${star ? '<span class="star">★</span> ' : ''}${esc(star ? title.slice(2) : title)}</b><span>${esc(when)} · ${esc(who)}</span>
+          ${ex ? `<div class="ex">${bullets(split(txt), 0, false)}<div style="margin-top:4px;color:var(--sub)">${fmt(note)}</div></div>` : ''}</label>
+          <button type="button" class="more" data-ex="${k}" aria-expanded="${ex}" aria-label="자세히">${IC.down}</button></div>`;
+      }).join('')}</div>`;
+    });
   } else {
-    h += `<div class="card"><div class="prog"><div class="bar"><i style="width:${doneP / packKeys.length * 100}%"></i></div><span class="mono">${doneP}/${packKeys.length}</span></div></div>`;
-    h += PACK.map(([name, items], gi) => `<div class="card"><h3 style="margin-bottom:4px">${name.startsWith('★') ? '<span class="star">★</span>' + esc(name.slice(1)) : esc(name)}</h3>
-      ${items.map(([n, m, w], ii) => { const k = 'p' + gi + '-' + ii, on = !!ck[k]; return `<label class="pk ${on ? 'done' : ''}"><input type="checkbox" id="${k}" data-ck="${k}" ${on ? 'checked' : ''}>
-        <div style="min-width:0"><div class="n">${n.startsWith('★') ? '<span class="star">★</span>' + esc(n.slice(1)) : esc(n)}</div>${m ? `<div class="m">${fmt(m)}</div>` : ''}</div><div class="w">${esc(w)}</div></label>`; }).join('')}</div>`).join('');
+    PACK.forEach(([name, items], gi) => {
+      h += `<div class="grp-t">${name.startsWith('★') ? '<span class="star">★</span>' + esc(name.slice(1)) : esc(name)}</div><div class="card list">${items.map(([n, m, w], ii) => {
+        const k = 'p' + gi + '-' + ii, on = !!ck[k];
+        return `<div class="row chk ${on ? 'done' : ''}"><input type="checkbox" id="${k}" data-ck="${k}" ${on ? 'checked' : ''}>
+          <label class="tx" for="${k}"><b>${n.startsWith('★') ? '<span class="star">★</span>' + esc(n.slice(1)) : esc(n)}</b><span>${[m, w].filter(Boolean).map(fmt).join(' · ')}</span></label></div>`;
+      }).join('')}</div>`;
+    });
   }
-  h += `<button type="button" class="ghost" id="resetChecks">체크 모두 지우기</button>`;
+  h += `<button type="button" class="reset" id="resetChecks">체크 모두 지우기</button>`;
   document.getElementById('v-prep').innerHTML = h;
 }
 
-/* ---------- render: info ---------- */
+/* ---------- 숙소·정보 ---------- */
 function renderInfo() {
-  document.getElementById('v-info').innerHTML = `
-  <div class="card">
-    <div class="eyebrow">숙소 · 2박</div>
-    <h2>강릉 치즈바다 풀빌라</h2>
-    <div class="kv"><span class="k">주소</span><span>강원 강릉시 사천면 중앙서로 92-76 <a class="maplink" target="_blank" rel="noopener" href="https://map.naver.com/p/search/${encodeURIComponent('강릉 치즈바다 풀빌라')}">지도</a></span></div>
-    <div class="kv"><span class="k">연락처</span><span>${fmt('010-8686-1892')}</span></div>
-    <div class="kv"><span class="k">체크인 / 체크아웃</span><span class="mono">15:00 / 10:30~11:00</span></div>
-    <div class="kv"><span class="k">참고</span><span>사천진·하평해변 인근 단지 (객실 오션뷰 아님) · 온수풀 32~34도 · 개별 바비큐 1세트 30,000원</span></div>
+  document.getElementById('v-info').innerHTML = `<h1>숙소·정보</h1>
+  <div class="card pad" style="display:flex;flex-direction:column;gap:12px">
+    <div><div style="font-size:13px;font-weight:700;color:var(--accent)">숙소 · 2박</div><div style="font-size:20px;font-weight:700">강릉 치즈바다 풀빌라</div><div style="font-size:15px;color:var(--sub)">강원 강릉시 사천면 중앙서로 92-76</div></div>
+    <div class="kgrid"><div><span>체크인</span><b>15:00</b></div><div><span>체크아웃</span><b>10:30</b></div></div>
+    <div style="font-size:14px;color:var(--sub)">객실 오션뷰 아님 · 온수풀 32~34도 · 개별 바비큐 1세트 30,000원</div>
+    <div class="acts"><a class="act" href="${mapUrl('치즈바다 풀빌라', 0)}" target="_blank" rel="noopener">${IC.pin}지도</a><a class="act" href="tel:01086861892">${IC.phone}전화</a><button type="button" class="act" data-copy="강원 강릉시 사천면 중앙서로 92-76">${IC.copy}주소</button></div>
   </div>
-  <div class="card alert">
-    <h3>응급 시</h3>
-    <p class="small" style="margin:6px 0 0">강릉아산병원 응급실이 숙소와 같은 사천면에 있어요. 주소와 연락처는 출발 전에 한 번 확인해 두세요. <a class="maplink" target="_blank" rel="noopener" href="https://map.naver.com/p/search/${encodeURIComponent('강릉아산병원 응급실')}">지도</a></p>
+  <a class="er" href="${mapUrl('강릉아산병원 응급실', 0)}" target="_blank" rel="noopener"><span class="ic">${IC.plus}</span><span class="tx"><b>응급 · 강릉아산병원 응급실</b><span>숙소와 같은 사천면 · 출발 전 연락처 확인</span></span>${IC.right}</a>
+  <div class="grp-t">이번 주 날씨 · 비 소식 없음</div>
+  <div class="card list wx">${WEATHER.map(([d, a, b, c]) => {
+    const m = d.match(/(\d+\/\d+) \((.)\)/);
+    const t = (a.match(/낮 ([\d~]+)℃/) || [])[1];
+    return `<div class="row"><div class="d"><b>${m[2]}</b><span>${m[1]}</span></div><div class="m"><b>${esc(c)}</b><span>강릉 ${esc(a)}</span><span>대관령 ${esc(b)}</span></div><div class="t">${t ? esc(t) + '°' : ''}</div></div>`;
+  }).join('')}</div>
+  <p class="note" style="margin:-4px 4px 0">기상청 10/21 11시 발표 기준이고 대관령 토요일 값은 추정이에요. 출발 당일 아침 강풍특보를 다시 확인하세요. 해는 바다에서 뜨고(06:45 전후) 산 쪽으로 집니다(17:40 전후).</p>
+  <div class="card pad" style="display:flex;flex-direction:column;gap:8px">
+    <div style="font-weight:700">플랜 읽는 법</div>
+    <div class="opt"><span class="chip" style="background:var(--a)">A</span>미식과 감성, 기본 추천</div>
+    <div class="opt"><span class="chip" style="background:var(--b)">B</span>휴식과 완만한 동선</div>
+    <div class="opt"><span class="chip" style="background:var(--c)">C</span>혼잡·악천후 대체</div>
+    <div class="opt"><span class="chip" style="background:var(--hot)">★</span>평점·인기 검증된 대안 식당</div>
   </div>
-  <div class="card">
-    <div class="eyebrow">이번 주 날씨</div>
-    <p class="small" style="margin:4px 0 6px">3일 모두 비 소식은 없고, 목요일이 가장 춥고 바람이 강하며 금요일부터 평년 기온을 회복합니다. 기상청 10/21 11시 발표 기준이고 대관령 토요일 값은 추정이에요. 출발 당일 아침 강풍특보를 다시 확인하세요.</p>
-    ${WEATHER.map(([d, a, b, c, e]) => `<div class="wxday"><span class="d">${esc(d)}</span>
-      <span><b>강릉·동해안</b> ${esc(a)}</span><span><b>대관령·산지</b> ${esc(b)}</span><span><b>하늘·바람</b> ${esc(c)}</span><span class="muted small">바꾼 것: ${esc(e)}</span></div>`).join('')}
-    <p class="small muted" style="margin:8px 0 0">강릉 바다는 동쪽을 향해 있어 해는 바다에서 뜨고(06:45 전후) 산 쪽으로 집니다(17:40 전후). 저녁에는 바다 위 노을 대신 분홍빛 하늘과 블루아워를 보세요.</p>
-  </div>
-  <div class="card">
-    <div class="eyebrow">플랜 읽는 법</div>
-    <div class="legend" style="margin-top:6px">
-      <span style="color:var(--sea)"><b>A</b>미식과 감성 (기본 추천)</span>
-      <span style="color:var(--pine)"><b>B</b>휴식과 완만한 동선</span>
-      <span style="color:var(--clay)"><b>C</b>혼잡·악천후 대체</span>
-      <span style="color:var(--hot)"><b>★</b>평점·인기 검증된 대안 식당</span>
-    </div>
-    <p class="small muted" style="margin:8px 0 0">여행 방향: 맛집·바다·온수풀·대관령 목장 중심, 하린이 낮잠과 어머님 이동 편의 우선. 양주 출발 → 강릉 2박 → 대관령 경유 → 양주 복귀.</p>
-  </div>
-  <div class="card">
-    <div class="eyebrow">출처</div>
-    <ol class="src">${SOURCES.map(s => `<li>${esc(s)}</li>`).join('')}</ol>
-  </div>`;
+  <details class="card src"><summary>출처 ${SOURCES.length}개</summary><ol>${SOURCES.map(s => `<li>${esc(s)}</li>`).join('')}</ol></details>`;
 }
 
 /* ---------- shell ---------- */
-function showTab(t, scroll = true) {
-  state.tab = t; store.set('tab', t);
-  document.querySelectorAll('.tabbar button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
-  ['plan', 'quick', 'prep', 'info'].forEach(v => document.getElementById('v-' + v).hidden = v !== t);
-  document.getElementById('dayseg').hidden = t !== 'plan';
-  if (scroll) window.scrollTo(0, 0);
+function show(view) {
+  ['plan', 'detail', 'switch', 'prep', 'info'].forEach(v => document.getElementById('v-' + v).hidden = v !== view);
+  const tab = view === 'detail' ? 'plan' : view;
+  document.querySelectorAll('.tabbar button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
 }
-function renderAll() { renderDaySeg(); renderPlan(); renderQuick(); renderPrep(); renderInfo(); showTab(state.tab, false); }
+function goTab(t) { state.tab = t; store.set('tab', t); state.slot = null; show(t); window.scrollTo(0, 0); }
+let savedY = 0;
+function openSlot(j) {
+  savedY = window.scrollY; state.slot = j; renderDetail(); show('detail'); window.scrollTo(0, 0);
+  try { history.pushState({ slot: j }, ''); } catch (e) {}
+}
+function closeSlot(fromPop) {
+  if (state.slot == null) return;
+  state.slot = null; renderPlan(); show('plan'); window.scrollTo(0, savedY);
+  if (!fromPop) { try { history.back(); } catch (e) {} }
+}
+window.addEventListener('popstate', () => { if (state.slot != null) closeSlot(true); });
 
 let toastT;
 function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 1600); }
 
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-tab],[data-day],[data-p],[data-goto],[data-seg],[data-copy],#resetChecks');
+  if (e.target.closest('a[href]')) return;
+  const t = e.target.closest('[data-tab],[data-day],[data-open],[data-back],[data-p],[data-seg],[data-copy],[data-ex],#resetChecks');
   if (!t) return;
-  if (t.dataset.tab) return showTab(t.dataset.tab);
-  if (t.dataset.day) { state.day = +t.dataset.day; store.set('day', state.day); renderDaySeg(); renderPlan(); window.scrollTo(0, 0); return; }
-  if (t.dataset.p) { state.plan[t.dataset.key] = +t.dataset.p; store.set('plan', state.plan); const y = window.scrollY; renderPlan(); window.scrollTo(0, y); return; }
-  if (t.dataset.goto) { document.getElementById('slot-' + t.dataset.goto)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  if (t.dataset.tab) return goTab(t.dataset.tab);
+  if (t.dataset.day) { state.day = +t.dataset.day; store.set('day', state.day); renderPlan(); return; }
+  if (t.dataset.open) return openSlot(+t.dataset.open);
+  if (t.hasAttribute('data-back')) return closeSlot(false);
+  if (t.dataset.p) { state.plan[state.day + '-' + state.slot] = +t.dataset.p; store.set('plan', state.plan); const y = window.scrollY; renderDetail(); window.scrollTo(0, y); return; }
   if (t.dataset.seg) { state.prepSeg = t.dataset.seg; store.set('prepSeg', t.dataset.seg); renderPrep(); return; }
+  if (t.dataset.ex) { state.open[t.dataset.ex] = !state.open[t.dataset.ex]; const y = window.scrollY; renderPrep(); window.scrollTo(0, y); return; }
   if (t.dataset.copy) {
-    e.preventDefault();
     const v = t.dataset.copy;
-    try { navigator.clipboard.writeText(v).then(() => toast(v + ' 복사했어요'), () => toast('길게 눌러 번호를 복사하세요')); } catch (err) { toast('길게 눌러 번호를 복사하세요'); }
+    try { navigator.clipboard.writeText(v).then(() => toast('복사했어요'), () => toast('길게 눌러 복사하세요')); } catch (err) { toast('길게 눌러 복사하세요'); }
     return;
   }
   if (t.id === 'resetChecks') { state.checks = {}; store.set('checks', {}); renderPrep(); toast('체크를 모두 지웠어요'); }
 });
-document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.goto) { e.preventDefault(); e.target.click(); } });
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.open) { e.preventDefault(); openSlot(+e.target.dataset.open); }
+});
+document.addEventListener('toggle', e => { if (e.target.dataset && e.target.dataset.key) state.open[e.target.dataset.key] = e.target.open; }, true);
 document.addEventListener('change', e => {
   const k = e.target.dataset && e.target.dataset.ck; if (!k) return;
   if (e.target.checked) state.checks[k] = 1; else delete state.checks[k];
@@ -776,12 +893,8 @@ document.addEventListener('change', e => {
   const y = window.scrollY; renderPrep(); window.scrollTo(0, y);
 });
 
-document.getElementById('dchip').textContent = dChip();
-renderAll();
-if (state.tab === 'plan' && todayIdx >= 0) {
-  const r = slotRanges(DAYS[todayIdx]).findIndex(([a, b]) => now.min >= a && now.min < b);
-  if (r >= 0) setTimeout(() => document.getElementById('slot-' + r)?.scrollIntoView({ block: 'start' }), 150);
-}
+renderPlan(); renderSwitch(); renderPrep(); renderInfo();
+show(state.tab === 'detail' ? 'plan' : state.tab);
 </script>
 
 <script>
