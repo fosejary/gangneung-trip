@@ -178,6 +178,8 @@ details.inf[open] summary svg { transform: rotate(180deg); }
 details.inf .body { padding: 0 0 14px; }
 details.inf ul.bul { font-size: 14px; }
 .tel { color: var(--accent); white-space: nowrap; text-decoration: none; }
+.pill { display: inline; background: var(--accent-soft); color: var(--accent); font-weight: 500; border-radius: 999px; padding: 1px 8px; white-space: nowrap; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.focus .pill { background: rgba(255,255,255,.14); color: #fff; }
 .mini { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 500; color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 6px; padding: 0 6px; margin-left: 4px; text-decoration: none; cursor: pointer; vertical-align: 1px; line-height: 1.7; }
 
 /* switch */
@@ -591,6 +593,8 @@ const MOVES = {
 
 
 
+
+
 /* ---------- icons ---------- */
 const IC = {
   pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -620,8 +624,22 @@ const startOf = t => (t.match(/\d{1,2}:\d{2}/) || [''])[0];
 const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
 const shortTitle = t => t.split(' (')[0];
 
+const pillText = s => fmt(s).replace(/\[([^\]]+)\]/g, (m, n) => isPlace(n) ? `<span class="pill">${n}</span>` : m);
+let PLACE_RE = null;
+function placeRe() {
+  if (PLACE_RE) return PLACE_RE;
+  const names = new Set(['양주', '강릉', '초당순두부마을', '강릉중앙시장', '중앙시장', '월화거리', '치즈바다 풀빌라', '사천진해변', '사천', '엄지네', '주문진', '대관령', '대관령 하늘목장', '하늘목장']);
+  DAYS.forEach(d => d.slots.forEach(sl => split(sl.info[1]).forEach(e => { if (e.h && isPlace(e.h)) names.add(e.h.replace(/\(.*?\)/g, '').replace(/^강릉\s+/, '').trim()); })));
+  const list = [...names].filter(n => n.length >= 2).sort((a, b) => b.length - a.length).map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  PLACE_RE = new RegExp('(' + list.join('|') + ')', 'g');
+  return PLACE_RE;
+}
+const pillTitle = t => esc(t).replace(placeRe(), '<span class="pill">$1</span>');
 function bullets(items, di, withMap) {
-  return '<ul class="bul">' + items.map(it => `<li>${it.h ? `<b>${esc(it.h)}</b> ` : ''}${fmt(it.t)}${withMap && isPlace(it.h) ? mapBtn(cleanName(it.h), di) : ''}</li>`).join('') + '</ul>';
+  return '<ul class="bul">' + items.map(it => {
+    const head = it.h ? (isPlace(it.h) ? `<span class="pill">${esc(it.h)}</span> ` : `<b>${esc(it.h)}</b> `) : '';
+    return `<li>${head}${pillText(it.t)}${withMap && isPlace(it.h) ? mapBtn(cleanName(it.h), di) : ''}</li>`;
+  }).join('') + '</ul>';
 }
 function findIn(text, name) {
   const n = norm(name);
@@ -737,7 +755,7 @@ function renderPlan() {
     const st = startOf(t), j = starts.indexOf(st), cls = status(st);
     return `<div class="row ${cls} ${j < 0 ? 'static' : ''}" ${j >= 0 ? `data-open="${j}" role="button" tabindex="0"` : ''}>
       <div class="t">${esc(st || t)}</div><div class="dot"></div>
-      <div class="tt"><b>${esc(title)}</b>${alt ? `<span class="alt">${esc(alt)}</span>` : ''}</div>${j >= 0 ? IC.right : ''}</div>`;
+      <div class="tt"><b>${pillTitle(title)}</b>${alt ? `<span class="alt">${esc(alt)}</span>` : ''}</div>${j >= 0 ? IC.right : ''}</div>`;
   }).join('')}</div></div></div>`;
   document.getElementById('v-plan').innerHTML = h;
 }
