@@ -604,6 +604,8 @@ const MOVES = {
 
 
 
+
+
 /* ---------- icons ---------- */
 const IC = {
   pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -637,10 +639,12 @@ const pillText = s => fmt(s).replace(/\[([^\]]+)\]/g, (m, n) => isPlace(n) ? `<s
 let PLACE_RE = null;
 function placeRe() {
   if (PLACE_RE) return PLACE_RE;
-  const names = new Set(['양주', '강릉', '초당순두부마을', '강릉중앙시장', '중앙시장', '월화거리', '치즈바다 풀빌라', '사천진해변', '사천', '엄지네', '주문진', '대관령', '대관령 하늘목장', '하늘목장']);
+  const AREAS = ['양주', '강릉', '사천', '대관령', '주문진'];
+  const names = new Set(['초당순두부마을', '강릉중앙시장', '중앙시장', '월화거리', '치즈바다 풀빌라', '사천진해변', '엄지네', '대관령 하늘목장', '하늘목장']);
   DAYS.forEach(d => d.slots.forEach(sl => split(sl.info[1]).forEach(e => { if (e.h && isPlace(e.h)) names.add(e.h.replace(/\(.*?\)/g, '').replace(/^강릉\s+/, '').trim()); })));
   const list = [...names].filter(n => n.length >= 2).sort((a, b) => b.length - a.length).map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-  PLACE_RE = new RegExp('(' + list.join('|') + ')', 'g');
+  const list2 = list.filter(n => !AREAS.includes(n));
+  PLACE_RE = new RegExp('(' + list2.join('|') + '|(?:' + AREAS.join('|') + ')(?= (?:출발|이동|도착)))', 'g');
   return PLACE_RE;
 }
 function colorPills(html) {
