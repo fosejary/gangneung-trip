@@ -207,7 +207,8 @@ button.opt .os { flex: none; display: inline-flex; align-items: center; gap: 3px
 button.opt .os svg { width: 14px; height: 14px; }
 button.opt.on { background: color-mix(in srgb, var(--pc) 9%, var(--surface)); border-color: color-mix(in srgb, var(--pc) 35%, var(--surface)); color: var(--ink); font-weight: 500; }
 button.opt .os.sel { color: var(--pc); font-weight: 600; }
-.pchip { align-self: flex-start; font-size: 12px; font-weight: 600; color: var(--pc); background: color-mix(in srgb, var(--pc) 10%, var(--surface)); border-radius: 5px; padding: 1px 6px; line-height: 1.5; }
+.pchip { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--pc); background: color-mix(in srgb, var(--pc) 10%, var(--surface)); border-radius: 6px; padding: 1px 7px 1px 2px; line-height: 1.5; }
+.pchip i { font-style: normal; width: 16px; height: 16px; border-radius: 4px; background: var(--pc); color: #fff; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
 .opt .chip { width: 22px; height: 22px; border-radius: 6px; font-size: 11px; }
 
 /* prep */
@@ -616,6 +617,8 @@ const MOVES = {
 
 
 
+
+
 /* ---------- icons ---------- */
 const IC = {
   pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -737,6 +740,11 @@ const state = {
 const planOf = (di, j) => state.plan[di + '-' + j] ?? 0;
 
 /* ---------- 일정 ---------- */
+function planChip(slot, di, j) {
+  const pi = planOf(di, j), p = placeOf(slot, pi);
+  const tag = pi === 0 && slot.aTag ? slot.aTag : PL[pi].tag;
+  return `<span class="pchip" style="--pc:${PL[pi].c}"><i>${PL[pi].k}</i>${esc(p ? p.name : tag)}</span>`;
+}
 function renderPlan() {
   const di = state.day, d = DAYS[di], mv = MOVES[d.label], w = WEATHER[di];
   const R = ranges(d);
@@ -787,7 +795,7 @@ function renderPlan() {
     const st = startOf(t), j = starts.indexOf(st), cls = status(st);
     return `<div class="row ${cls} ${j < 0 ? 'static' : ''}" ${j >= 0 ? `data-open="${j}" role="button" tabindex="0"` : ''}>
       <div class="t">${esc(st || t)}</div><div class="dot"></div>
-      <div class="tt"><b>${pillTitle(title)}</b>${j >= 0 && planOf(di, j) ? `<span class="pchip" style="--pc:${PL[planOf(di, j)].c}">${PL[planOf(di, j)].k} ${esc(PL[planOf(di, j)].tag)} 선택</span>` : ''}${alt ? `<span class="alt">${esc(alt)}</span>` : ''}</div>${j >= 0 ? IC.right : ''}</div>`;
+      <div class="tt"><b>${pillTitle(title)}</b>${j >= 0 ? planChip(d.slots[j], di, j) : ''}${alt ? `<span class="alt">${esc(alt)}</span>` : ''}</div>${j >= 0 ? IC.right : ''}</div>`;
   }).join('')}</div></div></div>`;
   document.getElementById('v-plan').innerHTML = h;
 }
