@@ -49,20 +49,24 @@ img{max-width:100%}
   --focus-bg: #1F2937;
   --focus-ink: #FFFFFF;
   --focus-sub: #C2CAD6;
+  --p1: #2B4FD8; --p1-bg: #ECF0FE;
+  --p2: #7044D6; --p2-bg: #F3EEFD;
+  --p3: #0E7C72; --p3-bg: #E4F5F2;
+  --p4: #C0317A; --p4-bg: #FCEDF5;
   --font: "Pretendard Variable", Pretendard, "Noto Sans KR", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --ground: #101318; --surface: #1A1F27; --ink: #F2F4F6; --ink-2: #D1D6DB; --sub: #A2ABB6; --faint: #7E8894; --line: #2A313B; --divider: #232A33; --seg: #232A33;
     --accent: #5A9CFF; --accent-soft: #1B2A42; --a: #5A9CFF; --b: #4CC38A; --b-soft: #15302A; --c: #F2994A; --hot: #FF6B81; --hot-soft: #3A1A21; --hot-ink: #FFB3BF;
-    --warn-soft: #33240F; --warn-ink: #F7C58C; --focus-bg: #263142; --focus-ink: #FFFFFF; --focus-sub: #B4C0D2;
+    --warn-soft: #33240F; --warn-ink: #F7C58C; --focus-bg: #263142; --focus-ink: #FFFFFF; --focus-sub: #B4C0D2; --p1: #9DB2FF; --p1-bg: #1E2748; --p2: #C3A8FF; --p2-bg: #2A2047; --p3: #6FD6C8; --p3-bg: #12322E; --p4: #FF9ACB; --p4-bg: #3A1A2C;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --ground: #101318; --surface: #1A1F27; --ink: #F2F4F6; --ink-2: #D1D6DB; --sub: #A2ABB6; --faint: #7E8894; --line: #2A313B; --divider: #232A33; --seg: #232A33;
   --accent: #5A9CFF; --accent-soft: #1B2A42; --a: #5A9CFF; --b: #4CC38A; --b-soft: #15302A; --c: #F2994A; --hot: #FF6B81; --hot-soft: #3A1A21; --hot-ink: #FFB3BF;
-  --warn-soft: #33240F; --warn-ink: #F7C58C; --focus-bg: #263142; --focus-ink: #FFFFFF; --focus-sub: #B4C0D2;
+  --warn-soft: #33240F; --warn-ink: #F7C58C; --focus-bg: #263142; --focus-ink: #FFFFFF; --focus-sub: #B4C0D2; --p1: #9DB2FF; --p1-bg: #1E2748; --p2: #C3A8FF; --p2-bg: #2A2047; --p3: #6FD6C8; --p3-bg: #12322E; --p4: #FF9ACB; --p4-bg: #3A1A2C;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -178,7 +182,10 @@ details.inf[open] summary svg { transform: rotate(180deg); }
 details.inf .body { padding: 0 0 14px; }
 details.inf ul.bul { font-size: 14px; }
 .tel { color: var(--accent); white-space: nowrap; text-decoration: none; }
-.pill { display: inline; background: var(--accent-soft); color: var(--accent); font-weight: 500; border-radius: 999px; padding: 1px 8px; white-space: nowrap; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.pill { display: inline; background: var(--p1-bg); color: var(--p1); font-weight: 500; border-radius: 999px; padding: 1px 8px; white-space: nowrap; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.pill.c2 { background: var(--p2-bg); color: var(--p2); }
+.pill.c3 { background: var(--p3-bg); color: var(--p3); }
+.pill.c4 { background: var(--p4-bg); color: var(--p4); }
 .focus .pill { background: rgba(255,255,255,.14); color: #fff; }
 .mini { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 500; color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 6px; padding: 0 6px; margin-left: 4px; text-decoration: none; cursor: pointer; vertical-align: 1px; line-height: 1.7; }
 
@@ -595,6 +602,8 @@ const MOVES = {
 
 
 
+
+
 /* ---------- icons ---------- */
 const IC = {
   pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -634,11 +643,19 @@ function placeRe() {
   PLACE_RE = new RegExp('(' + list.join('|') + ')', 'g');
   return PLACE_RE;
 }
-const pillTitle = t => esc(t).replace(placeRe(), '<span class="pill">$1</span>');
+function colorPills(html) {
+  const seen = new Map();
+  return html.replace(/<span class="pill">([^<]*)<\/span>/g, (m, n) => {
+    if (!seen.has(n)) seen.set(n, seen.size % 4);
+    const k = seen.get(n);
+    return `<span class="pill${k ? ' c' + (k + 1) : ''}">${n}</span>`;
+  });
+}
+const pillTitle = t => colorPills(esc(t).replace(placeRe(), '<span class="pill">$1</span>'));
 function bullets(items, di, withMap) {
   return '<ul class="bul">' + items.map(it => {
     const head = it.h ? (isPlace(it.h) ? `<span class="pill">${esc(it.h)}</span> ` : `<b>${esc(it.h)}</b> `) : '';
-    return `<li>${head}${pillText(it.t)}${withMap && isPlace(it.h) ? mapBtn(cleanName(it.h), di) : ''}</li>`;
+    return `<li>${colorPills(head + pillText(it.t))}${withMap && isPlace(it.h) ? mapBtn(cleanName(it.h), di) : ''}</li>`;
   }).join('') + '</ul>';
 }
 function findIn(text, name) {
