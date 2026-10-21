@@ -579,6 +579,8 @@ const MOVES = {
 
 
 
+
+
 /* ---------- icons ---------- */
 const IC = {
   pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -736,7 +738,7 @@ function renderDetail() {
   const p = placeOf(s, pi);
   let h = `<div class="dtop"><button type="button" class="back" data-back aria-label="일정으로 돌아가기">${IC.back}</button><div class="w">${di + 1}일차 · ${esc(s.time.replace(' ~ ', ' – '))}</div><div style="width:44px"></div></div>
     <h1 class="dtitle">${esc(s.title)}</h1>
-    ${leg[0] && leg[0] !== '숙소 내' ? `<div class="move">${IC.car}<span>${esc(leg[0])} · ${esc(leg[1])}</span></div>` : ''}
+    ${/→/.test(leg[0]) ? `<div class="move">${IC.car}<span>${esc(leg[0])} · ${esc(leg[1])}</span></div>` : ''}
     <div class="seg plan" role="tablist" style="grid-template-columns:repeat(3,minmax(0,1fr));--pc:${pc}">${PL.map((q, i) => `<button type="button" role="tab" data-p="${i}" aria-selected="${i === pi}">${q.k} ${esc(i === 0 && s.aTag ? s.aTag : q.tag)}</button>`).join('')}</div>
     <div class="card pad pcard" style="--pc:${pc}">`;
   if (p) {
