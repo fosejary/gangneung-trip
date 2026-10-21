@@ -65,14 +65,14 @@ img{max-width:100%}
 }
 * { box-sizing: border-box; }
 html, body { background: var(--ground); }
-body { color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5; font-variant-numeric: tabular-nums; -webkit-tap-highlight-color: transparent; }
+body { color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5; word-break: keep-all; overflow-wrap: break-word; font-variant-numeric: tabular-nums; -webkit-tap-highlight-color: transparent; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ground); }
 button { font: inherit; color: inherit; }
 a { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
 svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
-.app { max-width: 480px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 20px calc(96px + env(safe-area-inset-bottom, 0px)); }
+.app { max-width: 640px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px calc(96px + env(safe-area-inset-bottom, 0px)); }
 .view { display: flex; flex-direction: column; gap: 16px; }
 .view[hidden] { display: none !important; }
 
@@ -108,7 +108,7 @@ h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line
 .focus .act { background: rgba(255,255,255,.12); color: #fff; font-weight: 600; }
 
 .next { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); width: 100%; text-align: left; cursor: pointer; }
-.next .tx { flex: 1; min-width: 0; font-size: 15px; }
+.next .tx { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; }
 .next svg { color: var(--faint); }
 
 details.route summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; font-weight: 700; font-size: 15px; }
@@ -124,7 +124,7 @@ details.route .body { padding: 0 16px 16px; display: flex; flex-direction: colum
 /* timeline */
 .tl .row { align-items: flex-start; cursor: pointer; }
 .tl .row.static { cursor: default; }
-.tl .t { width: 52px; flex: none; font-size: 15px; font-weight: 700; padding-top: 1px; }
+.tl .t { width: 48px; flex: none; font-size: 15px; font-weight: 700; padding-top: 1px; }
 .tl .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 7px; background: var(--surface); border: 2px solid #C9CFD8; }
 .tl .row.now .dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
 .tl .row.done .dot { background: #C9CFD8; }
@@ -138,7 +138,7 @@ details.route .body { padding: 0 16px 16px; display: flex; flex-direction: colum
 .alt { align-self: flex-start; font-size: 13px; font-weight: 600; color: var(--b); background: var(--b-soft); border-radius: 6px; padding: 2px 7px; line-height: 1.45; }
 
 /* detail */
-.dtop { display: flex; align-items: center; justify-content: space-between; margin: -10px -8px 0; }
+.dtop { display: flex; align-items: center; justify-content: space-between; margin: -10px -10px 0; }
 .back { width: 44px; height: 44px; border: 0; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .back svg { width: 24px; height: 24px; stroke-width: 2.2; }
 .dtop .w { font-size: 15px; font-weight: 600; color: var(--sub); }
@@ -150,7 +150,7 @@ details.route .body { padding: 0 16px 16px; display: flex; flex-direction: colum
 .pcard .nm { font-size: 20px; font-weight: 700; line-height: 1.35; }
 .pcard .ad { font-size: 14px; color: var(--sub); }
 ul.bul { margin: 0; padding: 0 0 0 18px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.6; }
-ul.bul li { overflow-wrap: anywhere; }
+ul.bul li { overflow-wrap: break-word; }
 ul.bul b { font-weight: 700; }
 .hot-h { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 4px; }
 .hot-h b { font-size: 15px; color: var(--hot); }
@@ -224,7 +224,7 @@ details.src ol { margin: 0; padding: 0 16px 16px 34px; font-size: 13px; color: v
 
 /* tab bar */
 .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line); padding-top: 8px; padding-bottom: max(10px, env(safe-area-inset-bottom, 0px)); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
-.tabbar .in { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tabbar .in { max-width: 640px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .tabbar button { border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--faint); font-size: 12px; font-weight: 600; min-height: 48px; cursor: pointer; }
 .tabbar button svg { width: 24px; height: 24px; }
 .tabbar button[aria-selected="true"] { color: var(--accent); font-weight: 700; }
@@ -563,6 +563,8 @@ const MOVES = {
 ['스위스램 → 대관령 하늘목장', '차량 약 10~12분'],
 ['하늘목장 → 대관령IC → 양주', '약 3시간 30분~4시간 (휴게소 1회 포함)']] }
 };
+
+
 
 
 
