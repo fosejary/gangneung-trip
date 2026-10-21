@@ -597,6 +597,8 @@ const MOVES = {
 
 
 
+
+
 /* ---------- icons ---------- */
 const IC = {
   pin: '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -731,7 +733,8 @@ function renderPlan() {
     h += `<div class="card pad"><b style="font-size:15px">오늘 일정을 모두 마쳤어요.</b><p class="lead">편히 쉬세요. 내일 일정은 위에서 다음 날을 눌러 보세요.</p></div>`;
   }
 
-  h += `<details class="card route"${state.open.route ? ' open' : ''} data-key="route"><summary>오늘의 동선<span class="r">${esc(mv.drive.split(' (')[0].replace('하루 ', ''))}${IC.down}</span></summary>
+  const routeOpen = state.open.route ?? (window.matchMedia && matchMedia('(min-width: 720px)').matches);
+  h += `<details class="card route"${routeOpen ? ' open' : ''} data-key="route"><summary>오늘의 동선<span class="r">${esc(mv.drive.split(' (')[0].replace('하루 ', ''))}${IC.down}</span></summary>
     <div class="body"><div class="stops">${mv.route.split(' → ').map(x => `<span>${esc(x)}</span>`).join('<i>→</i>')}</div>
     <div>${esc(d.intro)}</div>
     <div class="note">날씨: 강릉 ${esc(w[1])} · 대관령 ${esc(w[2])} · ${esc(w[3])}</div>
